@@ -1,0 +1,29 @@
+# ZeroSync - one command to run everything
+# usage: docker-compose up
+# then open http://localhost:8000 in a few tabs
+
+services:
+  signaling:
+    build: .
+    command: node server/signaling.js
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./server/updates:/app/server/updates
+    restart: unless-stopped
+
+  client:
+    build: .
+    command: python3 -m http.server 8000 --directory client
+    ports:
+      - "8000:8000"
+    depends_on:
+      - signaling
+    restart: unless-stopped
+
+  hardhat:
+    build: .
+    command: sh -c "cd hardhat && npm install && npx hardhat node"
+    ports:
+      - "8545:8545"
+    restart: unless-stopped

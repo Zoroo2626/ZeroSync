@@ -1,0 +1,48 @@
+{
+  "name": "zerosync",
+  "version": "1.0.0",
+  "description": "Browser-native federated continual learning with deterministic time-travel and verifiable aggregation",
+  "private": true,
+  "scripts": {
+    "install:all": "cd server && npm install && cd ../hardhat && npm install",
+    "hardhat:start": "cd hardhat && npx hardhat node",
+    "hardhat:deploy": "cd hardhat && npx hardhat run scripts/deploy.js --network localhost",
+    "start:signaling": "node server/signaling.js",
+    "start:client:demo": "python3 -m http.server 8000 --directory client",
+    "zk:setup": "cd zk && bash build_setup.sh",
+    "zk:prove": "cd zk && bash prove_and_verify.sh",
+    "gen:circuits": "node scripts/gen_circuit.js",
+    "aggregate": "node aggregator/aggregate.js",
+    "he:aggregate": "node aggregator/he_aggregate.js",
+    "replay": "node aggregator/replay.js",
+    "test": "jest --verbose",
+    "test:watch": "jest --watch",
+    "e2e": "bash tests/e2e.sh",
+    "check:syntax": "node -e \"const {execSync}=require('child_process');const fs=require('fs');function walk(d){let r=[];for(const e of fs.readdirSync(d,{withFileTypes:true})){const p=d+'/'+e.name;if(e.isDirectory()&&!e.name.startsWith('.')&&e.name!=='node_modules')r=r.concat(walk(p));else if(e.name.endsWith('.js'))r.push(p);}return r;}walk('.').forEach(f=>{try{execSync('node --check '+f,{stdio:'pipe'});console.log('OK: '+f);}catch(e){console.error('FAIL: '+f);console.error(e.stderr.toString());process.exitCode=1;}})\""
+  },
+  "jest": {
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/hardhat/"
+    ]
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  },
+  "keywords": [
+    "federated-learning",
+    "tensorflow-js",
+    "zero-knowledge",
+    "hardhat",
+    "deterministic-replay",
+    "webrtc",
+    "zk-proofs"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^17.3.1"
+  }
+}

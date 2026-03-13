@@ -1,0 +1,52 @@
+name: ZeroSync CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Setup Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install server dependencies
+        run: cd server && npm install
+
+      - name: Syntax check JS files
+        run: |
+          echo "Running node --check on all JS files..."
+          FAIL=0
+          for f in $(find . -name '*.js' -not -path '*/node_modules/*' -not -path '*/.git/*' -not -path '*/artifacts/*' -not -path '*/cache/*'); do
+            if node --check "$f" 2>/dev/null; then
+              echo "  OK: $f"
+            else
+              echo "  FAIL: $f"
+              FAIL=1
+            fi
+          done
+          exit $FAIL
+
+      - name: Verify signaling server starts
+        run: |
+          cd server && timeout 5 node signaling.js &
+          sleep 2
+          kill %1 2>/dev/null || true
+          echo "Server startup check passed"

@@ -1,0 +1,13 @@
+{
+    "name": "zerosync-server",
+    "version": "0.1.0",
+    "description": "ZeroSync WebSocket signaling server for federated learning",
+    "private": true,
+    "main": "signaling.js",
+    "scripts": {
+        "start": "node signaling.js"
+    },
+    "dependencies": {
+        "ws": "^8.16.0"
+    }
+}

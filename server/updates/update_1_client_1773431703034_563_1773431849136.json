@@ -1,0 +1,15 @@
+{
+  "type": "model_update",
+  "clientId": "client_1773431703034_563",
+  "seed": 16908,
+  "trainSteps": 1,
+  "summaryVector": [
+    295,
+    -191,
+    31,
+    339
+  ],
+  "dpEnabled": true,
+  "epsilon": 10,
+  "timestamp": 1773431849136
+}

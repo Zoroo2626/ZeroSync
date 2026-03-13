@@ -1,0 +1,11 @@
+{
+  "type": "model_update",
+  "clientId": "test_e2e",
+  "summaryVector": [
+    100,
+    -200,
+    300,
+    -400
+  ],
+  "timestamp": 1771695750373
+}

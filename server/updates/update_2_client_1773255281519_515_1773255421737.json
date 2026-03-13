@@ -1,0 +1,13 @@
+{
+  "type": "model_update",
+  "clientId": "client_1773255281519_515",
+  "seed": 21860,
+  "trainSteps": 2,
+  "summaryVector": [
+    598,
+    -439,
+    429,
+    -404
+  ],
+  "timestamp": 1773255421732
+}

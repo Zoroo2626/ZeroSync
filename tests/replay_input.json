@@ -1,0 +1,21 @@
+{
+  "vectors": [
+    [
+      123,
+      -456,
+      789,
+      -101
+    ]
+  ],
+  "weights": [
+    1
+  ],
+  "expected_result": [
+    123,
+    -456,
+    789,
+    -101
+  ],
+  "replayed_from": "sample_client_0",
+  "original_seed": 12345
+}

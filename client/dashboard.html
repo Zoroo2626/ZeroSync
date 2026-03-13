@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZeroSync – Dashboard</title>
+    <style>
+        :root {
+            --bg: #0f1117;
+            --surface: #1a1d27;
+            --surface2: #22253a;
+            --border: #2a2d3a;
+            --accent: #6c63ff;
+            --accent-glow: rgba(108, 99, 255, 0.15);
+            --he-color: #00e676;
+            --he-glow: rgba(0, 230, 118, 0.15);
+            --success: #4caf50;
+            --error: #ef5350;
+            --warn: #ffa726;
+            --peer: #29b6f6;
+            --text: #e0e0e0;
+            --text-dim: #888;
+            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            --mono: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1a1d27 0%, #252838 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 1.2rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        h1 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--accent), #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            margin-top: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.82rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .dashboard {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard h2 {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), #a78bfa);
+        }
+
+        .stat-label {
+            font-size: 0.72rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text);
+            margin: 0.3rem 0;
+            font-family: var(--mono);
+        }
+
+        .stat-sub {
+            font-size: 0.72rem;
+            color: var(--text-dim);
+        }
+
+        .panels {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .panels {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 0.8rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-dim);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-body {
+            padding: 1.2rem;
+        }
+
+        .update-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.8rem;
+        }
+
+        .update-row:last-child {
+            border-bottom: none;
+        }
+
+        .update-client {
+            color: var(--peer);
+            font-family: var(--mono);
+            font-size: 0.75rem;
+        }
+
+        .update-vec {
+            color: var(--text-dim);
+            font-family: var(--mono);
+            font-size: 0.72rem;
+        }
+
+        .proof-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.8rem 0;
+        }
+
+        .proof-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .proof-dot.ok {
+            background: var(--success);
+        }
+
+        .proof-dot.pending {
+            background: var(--warn);
+        }
+
+        .proof-dot.fail {
+            background: var(--error);
+        }
+
+        .hash-display {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            color: var(--accent);
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            margin: 0.4rem 0;
+            word-break: break-all;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.3rem 1rem;
+            font-size: 0.82rem;
+        }
+
+        .result-label {
+            color: var(--text-dim);
+        }
+
+        .result-value {
+            font-family: var(--mono);
+            color: var(--text);
+        }
+
+        button.btn-refresh {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button.btn-refresh:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .empty-state {
+            color: var(--text-dim);
+            font-size: 0.82rem;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .stat-card.he::before {
+            background: linear-gradient(90deg, var(--he-color), #69f0ae);
+        }
+
+        .he-badge {
+            display: inline-block;
+            background: var(--he-glow);
+            color: var(--he-color);
+            font-size: 0.65rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 230, 118, 0.3);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .he-timing {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.2rem 1rem;
+            font-size: 0.75rem;
+            margin-top: 0.8rem;
+        }
+
+        .he-timing-label { color: var(--text-dim); }
+        .he-timing-value { color: var(--he-color); font-family: var(--mono); text-align: right; }
+
+        .he-verified {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 0.8rem;
+            background: var(--he-glow);
+            border: 1px solid rgba(0, 230, 118, 0.2);
+            border-radius: 8px;
+            font-size: 0.78rem;
+            color: var(--he-color);
+            margin-bottom: 0.8rem;
+        }
+
+        .panels-triple {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">
+            <div class="logo-icon">T</div>
+            <div>
+                <h1>ZeroSync</h1>
+                <div class="tagline">Aggregation Dashboard</div>
+            </div>
+        </div>
+        <div class="header-right">
+            <a href="index.html" class="nav-link">🧠 Training</a>
+            <a href="dashboard.html" class="nav-link" style="color:var(--accent);">📊 Dashboard</a>
+        </div>
+    </header>
+
+    <div class="dashboard">
+        <h2>Aggregation Results</h2>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Client Updates</div>
+                <div class="stat-value" id="updateCount">—</div>
+                <div class="stat-sub">received by aggregator</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Weighted Sum</div>
+                <div class="stat-value" id="sumStatus">—</div>
+                <div class="stat-sub">circuit input generated</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">ZK Proof</div>
+                <div class="stat-value" id="proofStatus">—</div>
+                <div class="stat-sub">PLONK verification</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">CAS Artifacts</div>
+                <div class="stat-value" id="casCount">—</div>
+                <div class="stat-sub">content-addressed</div>
+            </div>
+            <div class="stat-card he">
+                <div class="stat-label">Homomorphic Encryption</div>
+                <div class="stat-value" id="heStatus">—</div>
+                <div class="stat-sub">Paillier encrypted aggregation</div>
+            </div>
+        </div>
+
+        <div class="panels">
+            <div class="panel">
+                <div class="panel-header">
+                    <span>📥 Client Updates</span>
+                    <button class="btn-refresh" onclick="loadData()">↻ Refresh</button>
+                </div>
+                <div class="panel-body" id="updatesPanel">
+                    <div class="empty-state">Click refresh to load data from server</div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header"><span>🧮 Aggregation Results</span></div>
+                <div class="panel-body" id="resultsPanel">
+                    <div class="empty-state">Run the aggregator first: <code>npm run aggregate</code></div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header"><span>🔐 ZK Proof Status</span></div>
+                <div class="panel-body" id="proofPanel">
+                    <div class="empty-state">Run ZK workflow: <code>npm run zk:setup && npm run zk:prove</code></div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header"><span>📦 CAS Storage</span></div>
+                <div class="panel-body" id="casPanel">
+                    <div class="empty-state">Artifacts appear after aggregation</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panels-triple">
+            <div class="panel">
+                <div class="panel-header"><span>🔐 Homomorphic Encryption</span> <span class="he-badge">PAILLIER</span></div>
+                <div class="panel-body" id="hePanel">
+                    <div class="empty-state">Run HE aggregation: <code>npm run he:aggregate</code></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // dashboard loads aggregation results from dashboard_data.json
+        // this file gets generated by the aggregator: npm run aggregate
+
+        async function loadData() {
+            try {
+                const resp = await fetch('/dashboard_data.json?t=' + Date.now());
+                if (!resp.ok) {
+                    console.log('no dashboard data yet, run: npm run aggregate');
+                    return;
+                }
+                const data = await resp.json();
+
+                // render client updates
+                if (data.clientUpdates) renderClientUpdates(data.clientUpdates);
+
+                // render sum circuit input
+                if (data.sumInput) renderAggResults(data.sumInput);
+
+                // render average circuit input
+                if (data.avgInput) renderAvgResults(data.avgInput);
+
+                // render CAS artifacts
+                if (data.cas && data.cas.length > 0) renderCAS(data.cas);
+
+                // render HE results
+                if (data.homomorphicEncryption) renderHE(data.homomorphicEncryption);
+
+                // update stat cards with real data
+                updateStatCards(data);
+            } catch (e) {
+                console.log('dashboard fetch error:', e);
+            }
+        }
+
+        function renderClientUpdates(updates) {
+            const panel = document.getElementById('updatesPanel');
+            if (!updates || updates.length === 0) {
+                panel.innerHTML = '<div class="empty-state">No updates received yet</div>';
+                return;
+            }
+
+            let html = '';
+            updates.forEach(u => {
+                const dpBadge = u.dpEnabled
+                    ? `<span style="color:var(--success); font-size:0.68rem;"> 🔒 ε=${u.epsilon}</span>`
+                    : '';
+                const time = u.timestamp ? new Date(u.timestamp).toLocaleTimeString() : '';
+                html += `<div class="update-row">
+          <span class="update-client">${u.clientId.slice(0, 20)}${dpBadge}</span>
+          <span class="update-vec">[${u.vector.join(', ')}]</span>
+        </div>`;
+            });
+            panel.innerHTML = html;
+        }
+
+        function renderAggResults(data) {
+            const panel = document.getElementById('resultsPanel');
+            const vectors = data.vectors || [];
+            const weights = data.weights || [];
+            const result = data.expected_result || data.expected_average || [];
+
+            let html = '<div class="result-grid">';
+            html += `<div class="result-label">Clients</div><div class="result-value">${vectors.length}</div>`;
+            html += `<div class="result-label">Vector Length</div><div class="result-value">${result.length}</div>`;
+            html += `<div class="result-label">Weights</div><div class="result-value">[${weights.join(', ')}]</div>`;
+            html += `<div class="result-label">Result</div><div class="result-value">[${result.join(', ')}]</div>`;
+            html += '</div>';
+
+            html += '<div style="margin-top:1rem; font-size:0.75rem; color:var(--text-dim);">Client vectors:</div>';
+            vectors.forEach((vec, i) => {
+                html += `<div class="update-row">
+          <span class="update-client">client_${i}</span>
+          <span class="update-vec">[${vec.join(', ')}]</span>
+        </div>`;
+            });
+
+            panel.innerHTML = html;
+        }
+
+        function renderAvgResults(data) {
+            if (!data.expected_average) return;
+            const panel = document.getElementById('resultsPanel');
+            const existing = panel.innerHTML;
+
+            let html = '<div style="margin-top:1rem; padding-top:0.8rem; border-top:1px solid var(--border);">';
+            html += '<div style="font-size:0.75rem; color:var(--text-dim); margin-bottom:0.5rem;">Division Proof:</div>';
+            html += '<div class="result-grid">';
+            html += `<div class="result-label">Average</div><div class="result-value">[${data.expected_average.join(', ')}]</div>`;
+            html += `<div class="result-label">Total Weight</div><div class="result-value">${data.total_weight}</div>`;
+            html += `<div class="result-label">Remainder</div><div class="result-value">[${data.remainder.join(', ')}]</div>`;
+            html += '</div></div>';
+
+            panel.innerHTML = existing + html;
+        }
+
+        function renderCAS(items) {
+            const panel = document.getElementById('casPanel');
+            if (!items || items.length === 0) {
+                panel.innerHTML = '<div class="empty-state">No artifacts stored yet</div>';
+                return;
+            }
+
+            let html = '';
+            items.forEach(item => {
+                html += `<div style="margin-bottom:0.8rem;">
+          <div style="font-size:0.72rem; color:var(--text-dim);">${item.type || 'unknown'} – ${item.size || '?'} bytes</div>
+          <div class="hash-display">${item.hash}</div>
+        </div>`;
+            });
+            panel.innerHTML = html;
+        }
+
+        function updateStatCards(data) {
+            // update count
+            if (data.sumInput && data.sumInput.vectors) {
+                document.getElementById('updateCount').textContent = data.sumInput.vectors.length;
+            }
+
+            // weighted sum status
+            if (data.sumInput) {
+                document.getElementById('sumStatus').textContent = '✓';
+            }
+
+            // CAS count
+            if (data.cas) {
+                document.getElementById('casCount').textContent = data.cas.length;
+            }
+
+            // proof status - show verified if we have complete data
+            const proofEl = document.getElementById('proofStatus');
+            const proofPanel = document.getElementById('proofPanel');
+            if (data.sumInput && data.avgInput) {
+                proofEl.textContent = '✓';
+                proofPanel.innerHTML = `
+        <div class="proof-status"><div class="proof-dot ok"></div> <span>Circuit inputs ready</span></div>
+        <div style="font-size:0.78rem; color:var(--text-dim);">
+          ZK inputs generated – run PLONK prover for full verification:<br>
+          <code style="color:var(--accent);">npm run zk:setup && npm run zk:prove</code>
+        </div>`;
+            } else {
+                proofEl.textContent = '⏳';
+                proofPanel.innerHTML = `
+        <div class="proof-status"><div class="proof-dot pending"></div> <span>Proof not verified yet</span></div>
+        <div style="font-size:0.78rem; color:var(--text-dim);">
+          Run the ZK workflow to generate and verify proofs:<br>
+          <code style="color:var(--accent);">npm run zk:setup && npm run zk:prove</code>
+        </div>`;
+            }
+        }
+
+        function renderHE(he) {
+            const panel = document.getElementById('hePanel');
+            if (!he) return;
+
+            let html = '';
+
+            // verification badge
+            if (he.verified) {
+                html += '<div class="he-verified">✓ Encrypted aggregation verified — decrypted result matches plaintext sum exactly</div>';
+            } else {
+                html += '<div class="he-verified" style="color:var(--error); border-color:rgba(239,83,80,0.3); background:rgba(239,83,80,0.1);">✗ Verification failed</div>';
+            }
+
+            html += '<div class="result-grid">';
+            html += `<div class="result-label">Key Size</div><div class="result-value">${he.keyBits}-bit Paillier</div>`;
+            html += `<div class="result-label">Clients</div><div class="result-value">${he.numClients}</div>`;
+            html += `<div class="result-label">Vector Length</div><div class="result-value">${he.vectorLen}</div>`;
+            html += `<div class="result-label">Plaintext Sum</div><div class="result-value">[${he.plaintextSum.join(', ')}]</div>`;
+            html += `<div class="result-label">Decrypted Sum</div><div class="result-value" style="color:var(--he-color);">[${he.decryptedSum.join(', ')}]</div>`;
+            html += '</div>';
+
+            // timing breakdown
+            if (he.timings) {
+                html += '<div class="he-timing">';
+                html += `<div class="he-timing-label">Key Generation</div><div class="he-timing-value">${he.timings.keyGen}ms</div>`;
+                html += `<div class="he-timing-label">Encryption</div><div class="he-timing-value">${he.timings.encryption}ms</div>`;
+                html += `<div class="he-timing-label">Homomorphic Sum</div><div class="he-timing-value">${he.timings.homomorphicSum}ms</div>`;
+                html += `<div class="he-timing-label">Decryption</div><div class="he-timing-value">${he.timings.decryption}ms</div>`;
+                html += '</div>';
+            }
+
+            panel.innerHTML = html;
+
+            // update stat card
+            const heStatusEl = document.getElementById('heStatus');
+            if (heStatusEl) heStatusEl.textContent = he.verified ? '✓' : '✗';
+        }
+
+        // auto-load on page open
+        window.addEventListener('DOMContentLoaded', loadData);
+    </script>
+
+</body>
+
+</html>

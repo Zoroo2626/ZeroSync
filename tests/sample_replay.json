@@ -1,0 +1,61 @@
+{
+    "version": "1.0.0",
+    "project": "ZeroSync",
+    "clientId": "sample_client_0",
+    "seed": 12345,
+    "startTime": 1700000000000,
+    "events": [
+        {
+            "type": "train_step",
+            "timestamp": 100,
+            "data": {
+                "step": 1,
+                "loss": 0.6931,
+                "accuracy": 0.5
+            }
+        },
+        {
+            "type": "train_step",
+            "timestamp": 250,
+            "data": {
+                "step": 2,
+                "loss": 0.6500,
+                "accuracy": 0.5625
+            }
+        },
+        {
+            "type": "send_update",
+            "timestamp": 400,
+            "data": {
+                "intVector": [
+                    123,
+                    -456,
+                    789,
+                    -101
+                ]
+            }
+        }
+    ],
+    "checkpoints": [
+        {
+            "label": "after_train_1",
+            "timestamp": 150,
+            "weights": [
+                {
+                    "name": "hidden/kernel",
+                    "shape": [
+                        4,
+                        8
+                    ],
+                    "data": [
+                        0.1,
+                        0.2,
+                        0.3,
+                        0.4
+                    ]
+                }
+            ]
+        }
+    ],
+    "exportedAt": 1700000001000
+}

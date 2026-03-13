@@ -1,0 +1,290 @@
+{
+  "sumInput": {
+    "vectors": [
+      [
+        25,
+        -253,
+        350,
+        654
+      ],
+      [
+        598,
+        -439,
+        429,
+        -404
+      ],
+      [
+        1,
+        271,
+        -597,
+        45
+      ],
+      [
+        295,
+        -191,
+        31,
+        339
+      ]
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "expected_result": [
+      919,
+      -612,
+      213,
+      634
+    ]
+  },
+  "avgInput": {
+    "vectors": [
+      [
+        25,
+        -253,
+        350,
+        654
+      ],
+      [
+        598,
+        -439,
+        429,
+        -404
+      ],
+      [
+        1,
+        271,
+        -597,
+        45
+      ],
+      [
+        295,
+        -191,
+        31,
+        339
+      ]
+    ],
+    "weights": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "expected_average": [
+      229,
+      -153,
+      53,
+      158
+    ],
+    "total_weight": "4",
+    "remainder": [
+      3,
+      0,
+      1,
+      2
+    ]
+  },
+  "cas": [
+    {
+      "hash": "2c5f80a62de312fa1796014b4568c2387c14c27485304e5b8d2c8fa3238335e1",
+      "type": "aggregated_model",
+      "size": 277
+    },
+    {
+      "hash": "5ac179e8df60ef2cd58899ab751e41b8dff602d82499bd3f496f845c36d7d7f6",
+      "type": "circuit_input_sum",
+      "size": 142
+    },
+    {
+      "hash": "ebd2af9f7f36914b6dee13b25870c9350680b501a9f079bbec25007ef2dea6a5",
+      "type": "circuit_input_average",
+      "size": 183
+    }
+  ],
+  "clientUpdates": [
+    {
+      "clientId": "client_1771696839921_296",
+      "vector": [
+        25,
+        -253,
+        350,
+        654
+      ],
+      "steps": 2,
+      "dpEnabled": false,
+      "epsilon": 0,
+      "timestamp": 1771696910066
+    },
+    {
+      "clientId": "client_1773255281519_515",
+      "vector": [
+        598,
+        -439,
+        429,
+        -404
+      ],
+      "steps": 2,
+      "dpEnabled": false,
+      "epsilon": 0,
+      "timestamp": 1773255398397
+    },
+    {
+      "clientId": "client_1773255833060_863",
+      "vector": [
+        1,
+        271,
+        -597,
+        45
+      ],
+      "steps": 3,
+      "dpEnabled": false,
+      "epsilon": 0,
+      "timestamp": 1773256001369
+    },
+    {
+      "clientId": "client_1773431703034_563",
+      "vector": [
+        295,
+        -191,
+        31,
+        339
+      ],
+      "steps": 1,
+      "dpEnabled": true,
+      "epsilon": 10,
+      "timestamp": 1773431849136
+    },
+    {
+      "clientId": "test_e2e",
+      "vector": [
+        100,
+        -200,
+        300,
+        -400
+      ],
+      "steps": 0,
+      "dpEnabled": false,
+      "epsilon": 0,
+      "timestamp": 1771695750373
+    },
+    {
+      "clientId": "client_1771697304896_589",
+      "vector": [
+        236,
+        -75,
+        -646,
+        -389
+      ],
+      "steps": 1,
+      "dpEnabled": false,
+      "epsilon": 0,
+      "timestamp": 1771697309370
+    },
+    {
+      "clientId": "client_1773255281519_515",
+      "vector": [
+        598,
+        -439,
+        429,
+        -404
+      ],
+      "steps": 2,
+      "dpEnabled": false,
+      "epsilon": 0,
+      "timestamp": 1773255421732
+    },
+    {
+      "clientId": "client_1773255833060_863",
+      "vector": [
+        1,
+        287,
+        -568,
+        59
+      ],
+      "steps": 4,
+      "dpEnabled": false,
+      "epsilon": 0,
+      "timestamp": 1773256044760
+    },
+    {
+      "clientId": "client_1773255833060_863",
+      "vector": [
+        1,
+        287,
+        -568,
+        59
+      ],
+      "steps": 4,
+      "dpEnabled": false,
+      "epsilon": 0,
+      "timestamp": 1773256057460
+    },
+    {
+      "clientId": "client_1773255833060_863",
+      "vector": [
+        1,
+        287,
+        -568,
+        59
+      ],
+      "steps": 4,
+      "dpEnabled": false,
+      "epsilon": 0,
+      "timestamp": 1773256092609
+    },
+    {
+      "clientId": "client_1773255833060_863",
+      "vector": [
+        1,
+        287,
+        -568,
+        59
+      ],
+      "steps": 4,
+      "dpEnabled": false,
+      "epsilon": 0,
+      "timestamp": 1773256192674
+    },
+    {
+      "clientId": "client_1773255833060_863",
+      "vector": [
+        1,
+        287,
+        -568,
+        59
+      ],
+      "steps": 4,
+      "dpEnabled": false,
+      "epsilon": 0,
+      "timestamp": 1773256267788
+    }
+  ],
+  "generatedAt": "2026-03-13T21:01:10.170Z",
+  "homomorphicEncryption": {
+    "verified": true,
+    "keyBits": 512,
+    "plaintextSum": [
+      919,
+      -612,
+      213,
+      634
+    ],
+    "decryptedSum": [
+      919,
+      -612,
+      213,
+      634
+    ],
+    "numClients": 4,
+    "vectorLen": 4,
+    "timings": {
+      "keyGen": 10,
+      "encryption": 18,
+      "homomorphicSum": 0,
+      "decryption": 4
+    },
+    "generatedAt": "2026-03-13T21:01:19.928Z"
+  }
+}

@@ -1,0 +1,14 @@
+node_modules/
+hardhat/cache/
+hardhat/artifacts/
+server/updates/
+storage/data/
+storage/index.json
+zk/build/
+zk/input.json
+zk/input_average.json
+tests/e2e_output.txt
+tests/temp_cas_*
+tests/replay_input.json
+*.sym
+.env
