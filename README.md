@@ -75,3 +75,5 @@ What does that mean for you?
 ## Contact / Consulting
 
 I am available for freelance/contract work. If your startup or lab is building privacy-preserving AI and you need someone who actually understands how to implement DP, ZK, and HE end-to-end, let's talk.
+
+### astrynnoctra@gmail.com
