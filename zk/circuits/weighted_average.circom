@@ -41,6 +41,9 @@ template WeightedAverage(N, VECTOR_LEN) {
     signal products[N][VECTOR_LEN];
     signal avg_times_total[VECTOR_LEN];
 
+    // range check components (one per dimension)
+    component lt[VECTOR_LEN];
+
     // check total_weight = sum of all weights
     var weight_sum = 0;
     for (var j = 0; j < N; j++) {
@@ -60,10 +63,10 @@ template WeightedAverage(N, VECTOR_LEN) {
         acc === avg_times_total[i] + remainder[i];
 
         // remainder must be less than totalWeight (range check)
-        component lt = LessThan(32);
-        lt.in[0] <== remainder[i];
-        lt.in[1] <== total_weight;
-        lt.out === 1;
+        lt[i] = LessThan(32);
+        lt[i].in[0] <== remainder[i];
+        lt[i].in[1] <== total_weight;
+        lt[i].out === 1;
     }
 }
 

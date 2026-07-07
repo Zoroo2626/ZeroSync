@@ -55,7 +55,7 @@ function main() {
         if (event.type === 'train_step') {
             // burn through the same number of rng calls as training would
             // 32 samples * 4 features = 128 calls (or more with iris shuffle)
-            const samples = (event.data && event.data.dataset === 'iris') ? 80 + 32 * 4 : 32 * 4;
+            const samples = (event.data && event.data.dataset === 'iris') ? 79 : 32 * 4;
             for (let i = 0; i < samples; i++) rng();
             console.log(`    step ${event.data.step}: loss=${event.data.loss?.toFixed(4)}, acc=${event.data.accuracy?.toFixed(4)}`);
         }
