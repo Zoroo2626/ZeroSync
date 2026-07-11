@@ -13,7 +13,7 @@ The triple-layer privacy stack:
 
 If you want to understand how privacy-preserving ML actually works in practice, this is a clean reference implementation.
 
-![ZeroSync Dashboard](./assets/dashboard.png)
+![ZeroSync Dashboard](./assets/dashboard.jpg)
 
 ***
 
