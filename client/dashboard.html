@@ -7,14 +7,14 @@
   <title>ZeroSync – Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #07090e;
-      --surface: rgba(18, 20, 29, 0.65);
-      --surface-solid: #12141d;
-      --border: rgba(255, 255, 255, 0.08);
-      --border-focus: rgba(99, 102, 241, 0.4);
+      --bg: #05060b;
+      --surface: rgba(13, 16, 28, 0.45);
+      --surface-solid: #0d101c;
+      --border: rgba(255, 255, 255, 0.06);
+      --border-hover: rgba(99, 102, 241, 0.25);
       --accent: #6366f1;
       --accent-glow: rgba(99, 102, 241, 0.15);
       --he-color: #10b981;
@@ -23,8 +23,9 @@
       --error: #f43f5e;
       --warn: #f59e0b;
       --peer: #0ea5e9;
-      --text: #f1f5f9;
-      --text-dim: #94a3b8;
+      --privacy: #a855f7;
+      --text: #f8fafc;
+      --text-dim: #64748b;
       --font: 'Inter', system-ui, -apple-system, sans-serif;
       --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
       --mono: 'Fira Code', 'Consolas', monospace;
@@ -35,70 +36,104 @@
     body {
       font-family: var(--font);
       background-color: var(--bg);
-      background-image: 
-        radial-gradient(circle at 90% 10%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
-        radial-gradient(circle at 10% 90%, rgba(16, 185, 129, 0.04) 0%, transparent 45%);
       color: var(--text);
       min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient glowing background blobs */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.45;
+      animation: drift 25s infinite alternate ease-in-out;
+    }
+    .blob-1 {
+      width: 450px; height: 450px;
+      background: radial-gradient(circle, var(--accent) 0%, rgba(99, 102, 241, 0) 70%);
+      top: -10%; left: -10%;
+    }
+    .blob-2 {
+      width: 550px; height: 550px;
+      background: radial-gradient(circle, var(--privacy) 0%, rgba(168, 85, 247, 0) 70%);
+      bottom: -15%; right: -5%;
+      animation-delay: -5s;
+    }
+    .blob-3 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--he-color) 0%, rgba(16, 185, 129, 0) 70%);
+      top: 40%; left: 35%;
+      animation-delay: -10s;
+    }
+
+    @keyframes drift {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(60px, 40px) scale(1.15); }
     }
 
     header {
-      background: rgba(10, 11, 18, 0.7);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(8, 10, 19, 0.65);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
-      padding: 1rem 2.5rem;
+      padding: 1.1rem 2.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
       z-index: 10;
+      position: relative;
     }
 
-    .logo { display: flex; align-items: center; gap: 0.85rem; }
+    .logo { display: flex; align-items: center; gap: 0.95rem; }
 
     .logo-icon {
-      width: 40px; height: 40px;
+      width: 42px; height: 42px;
       background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 100%);
-      border-radius: 10px;
+      border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
       color: white;
-      box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .logo-icon svg {
-      width: 22px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       fill: none;
       stroke: currentColor;
-      stroke-width: 2;
+      stroke-width: 2.2;
     }
 
-    h1 {
+    .logo-text h1 {
       font-family: var(--font-display);
-      font-size: 1.45rem; font-weight: 700;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #ffffff 30%, #c7d2fe 100%);
+      font-size: 1.55rem; font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #ffffff 40%, #c7d2fe 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .tagline { font-size: 0.78rem; color: var(--text-dim); margin-top: 1px; font-weight: 500; }
+    .tagline { font-size: 0.8rem; color: var(--text-dim); margin-top: 1px; font-weight: 500; }
 
-    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .header-right { display: flex; align-items: center; gap: 1.25rem; }
 
     .nav-link {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      color: var(--text-dim); text-decoration: none; font-size: 0.85rem;
+      gap: 0.5rem;
+      color: var(--text-dim); text-decoration: none; font-size: 0.88rem;
       font-weight: 600;
-      padding: 0.5rem 1rem; border-radius: 8px;
+      padding: 0.55rem 1.1rem; border-radius: 10px;
       border: 1px solid transparent;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .nav-link:hover { 
       color: var(--text); 
-      background: rgba(255, 255, 255, 0.03); 
+      background: rgba(255, 255, 255, 0.04); 
       border-color: var(--border);
     }
     .nav-link.active {
@@ -111,29 +146,31 @@
       height: 16px;
       fill: none;
       stroke: currentColor;
-      stroke-width: 2;
+      stroke-width: 2.2;
     }
 
     .dashboard {
       padding: 2.5rem;
       max-width: 1300px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
     .dashboard h2 {
       font-family: var(--font-display);
-      font-size: 1.25rem;
+      font-size: 1.45rem;
       color: var(--text);
       margin-bottom: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
+      font-weight: 800;
+      letter-spacing: -0.02em;
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.65rem;
     }
     .dashboard h2 svg {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       stroke-width: 2.5;
       color: var(--accent);
     }
@@ -141,26 +178,38 @@
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.25rem;
+      gap: 1.5rem;
       margin-bottom: 2.5rem;
     }
 
     .stat-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.4rem;
+      border-radius: 18px;
+      padding: 1.5rem;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 18px;
+      border: 1px solid transparent;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0)) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      pointer-events: none;
     }
     .stat-card:hover {
-      border-color: rgba(255, 255, 255, 0.12);
+      border-color: var(--border-hover);
       transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 10px 40px rgba(99, 102, 241, 0.05);
     }
 
     .stat-card::before {
@@ -175,7 +224,7 @@
 
     .stat-label {
       font-family: var(--font-display);
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       color: var(--text-dim);
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -183,16 +232,57 @@
     }
 
     .stat-value {
-      font-size: 2rem;
+      font-size: 2.2rem;
       font-weight: 800;
       color: var(--text);
-      margin: 0.4rem 0;
-      font-family: var(--mono);
+      margin: 0.5rem 0;
+      font-family: var(--font-display);
       letter-spacing: -0.03em;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Style ZK/HE/Plaintext checkmarks as custom styled icons instead of serif fallback */
+    .status-check {
+      color: var(--success);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+    .status-check svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 3;
+    }
+
+    .status-pending {
+      color: var(--warn);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+    .status-pending svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 3;
     }
 
     .stat-sub {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       color: var(--text-dim);
       font-weight: 500;
     }
@@ -200,8 +290,8 @@
     .panels {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.75rem;
-      margin-bottom: 1.75rem;
+      gap: 2rem;
+      margin-bottom: 2rem;
     }
 
     @media (max-width: 992px) {
@@ -213,55 +303,68 @@
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 18px;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      transition: all 0.25s ease;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .panel::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: 18px;
+      border: 1px solid transparent;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0)) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      pointer-events: none;
     }
     .panel:hover {
-      border-color: rgba(255, 255, 255, 0.12);
+      border-color: var(--border-hover);
     }
 
     .panel-header {
-      padding: 1.1rem 1.5rem;
+      padding: 1.2rem 1.6rem;
       border-bottom: 1px solid var(--border);
       font-family: var(--font-display);
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--text-dim);
-      font-weight: 700;
+      font-weight: 800;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(13, 15, 23, 0.4);
+      background: rgba(9, 11, 20, 0.5);
     }
 
     .panel-header span {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.65rem;
     }
     .panel-header svg {
-      width: 15px;
-      height: 15px;
+      width: 16px;
+      height: 16px;
       stroke-width: 2.5;
     }
 
     .panel-body {
-      padding: 1.5rem;
-      min-height: 220px;
+      padding: 1.6rem;
+      min-height: 240px;
     }
 
     .update-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.65rem 0;
+      padding: 0.75rem 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      font-size: 0.85rem;
+      font-size: 0.88rem;
     }
 
     .update-row:last-child {
@@ -271,30 +374,31 @@
     .update-client {
       color: var(--peer);
       font-family: var(--mono);
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 500;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
     }
 
     .update-vec {
       color: var(--text);
       font-family: var(--mono);
-      font-size: 0.78rem;
-      background: rgba(0, 0, 0, 0.2);
-      padding: 0.25rem 0.5rem;
-      border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.02);
+      font-size: 0.8rem;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 0.3rem 0.65rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
     }
 
     .proof-status {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
+      gap: 0.65rem;
       margin-bottom: 1rem;
-      font-weight: 600;
-      font-size: 0.9rem;
+      font-weight: 700;
+      font-size: 0.95rem;
+      font-family: var(--font-display);
     }
 
     .proof-dot {
@@ -305,45 +409,45 @@
 
     .proof-dot.ok {
       background: var(--success);
-      box-shadow: 0 0 8px var(--success);
+      box-shadow: 0 0 10px var(--success);
     }
 
     .proof-dot.pending {
       background: var(--warn);
-      box-shadow: 0 0 8px var(--warn);
+      box-shadow: 0 0 10px var(--warn);
     }
 
     .proof-dot.fail {
       background: var(--error);
-      box-shadow: 0 0 8px var(--error);
+      box-shadow: 0 0 10px var(--error);
     }
 
     .hash-display {
       font-family: var(--mono);
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       color: var(--accent);
       background: rgba(0, 0, 0, 0.35);
-      padding: 0.6rem 0.8rem;
-      border-radius: 8px;
-      margin: 0.5rem 0 1rem 0;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      margin: 0.5rem 0 1.25rem 0;
       word-break: break-all;
       border: 1px solid rgba(255, 255, 255, 0.02);
     }
 
     .result-grid {
       display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 0.5rem 1rem;
-      font-size: 0.88rem;
-      background: rgba(0, 0, 0, 0.15);
-      padding: 1rem;
-      border-radius: 10px;
+      grid-template-columns: 130px 1fr;
+      gap: 0.65rem 1rem;
+      font-size: 0.9rem;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 1.2rem;
+      border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.02);
     }
 
     .result-label {
       color: var(--text-dim);
-      font-weight: 500;
+      font-weight: 600;
     }
 
     .result-value {
@@ -353,56 +457,56 @@
     }
 
     button.btn-refresh {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--border);
       color: var(--text-dim);
-      padding: 0.4rem 0.9rem;
-      border-radius: 8px;
-      font-size: 0.78rem;
-      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      transition: all 0.2s;
+      gap: 0.5rem;
+      transition: all 0.25s;
     }
 
     button.btn-refresh:hover {
-      border-color: var(--accent-glow);
-      background: rgba(99, 102, 241, 0.05);
-      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(99, 102, 241, 0.06);
+      color: var(--text);
     }
     button.btn-refresh svg {
-      width: 12px;
-      height: 12px;
+      width: 14px;
+      height: 14px;
       stroke-width: 2.5;
     }
 
     .empty-state {
       color: var(--text-dim);
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       text-align: center;
-      padding: 3rem 1.5rem;
+      padding: 3.5rem 1.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 1rem;
+      gap: 1.1rem;
     }
     .empty-state svg {
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       stroke: var(--text-dim);
-      stroke-width: 1.5;
-      opacity: 0.5;
+      stroke-width: 1.8;
+      opacity: 0.45;
     }
     .empty-state code {
       font-family: var(--mono);
-      background: rgba(0, 0, 0, 0.3);
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
       color: var(--accent);
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       border: 1px solid rgba(255, 255, 255, 0.02);
     }
 
@@ -415,54 +519,58 @@
       align-items: center;
       background: rgba(16, 185, 129, 0.08);
       color: var(--success);
-      font-size: 0.7rem;
-      padding: 0.2rem 0.6rem;
+      font-size: 0.72rem;
+      padding: 0.25rem 0.75rem;
       border-radius: 20px;
-      border: 1px solid rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.18);
       font-weight: 700;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
     }
 
     .he-timing {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 0.4rem 1.5rem;
-      font-size: 0.82rem;
-      margin-top: 1.25rem;
-      background: rgba(0, 0, 0, 0.15);
-      padding: 1rem;
-      border-radius: 10px;
+      gap: 0.5rem 1.5rem;
+      font-size: 0.88rem;
+      margin-top: 1.5rem;
+      background: rgba(0, 0, 0, 0.25);
+      padding: 1.2rem;
+      border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.02);
     }
 
-    .he-timing-label { color: var(--text-dim); font-weight: 500; }
+    .he-timing-label { color: var(--text-dim); font-weight: 600; }
     .he-timing-value { color: var(--he-color); font-family: var(--mono); text-align: right; font-weight: 600; }
 
     .he-verified {
       display: flex;
       align-items: center;
-      gap: 0.6rem;
-      padding: 0.8rem 1rem;
-      background: rgba(16, 185, 129, 0.06);
-      border: 1px solid rgba(16, 185, 129, 0.25);
-      border-radius: 10px;
-      font-size: 0.85rem;
+      gap: 0.75rem;
+      padding: 0.9rem 1.2rem;
+      background: rgba(16, 185, 129, 0.04);
+      border: 1px solid rgba(16, 185, 129, 0.18);
+      border-radius: 12px;
+      font-size: 0.9rem;
       color: #34d399;
-      margin-bottom: 1.25rem;
-      font-weight: 500;
-      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.05);
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.05);
     }
 
     .panels-triple {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1.75rem;
-      margin-bottom: 2.5rem;
+      gap: 2rem;
+      margin-bottom: 3rem;
     }
   </style>
 </head>
 
 <body>
+
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
 
   <header>
     <div class="logo">
@@ -471,7 +579,7 @@
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
         </svg>
       </div>
-      <div>
+      <div class="logo-text">
         <h1>ZeroSync</h1>
         <div class="tagline">Aggregation Dashboard</div>
       </div>
@@ -481,13 +589,13 @@
         <svg viewBox="0 0 24 24">
           <path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1113 16h9m-9-8a4.5 4.5 0 00-9 0m9 8a4.5 4.5 0 01-9 0" />
         </svg>
-        🧠 Training
+        Training
       </a>
       <a href="dashboard.html" class="nav-link active">
         <svg viewBox="0 0 24 24">
           <path d="M18 20V10M12 20V4M6 20v-6" />
         </svg>
-        📊 Dashboard
+        Dashboard
       </a>
     </div>
   </header>
@@ -626,8 +734,9 @@
   </div>
 
   <script>
-    // dashboard loads aggregation results from dashboard_data.json
-    // this file gets generated by the aggregator: npm run aggregate
+    // Helper to generate a styled checkmark SVG
+    const checkmarkSvg = `<span class="status-check"><svg viewBox="0 0 24 24"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
+    const pendingSvg = `<span class="status-pending"><svg viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
 
     async function loadData() {
         try {
@@ -754,7 +863,7 @@
 
         // weighted sum status
         if (data.sumInput) {
-            document.getElementById('sumStatus').textContent = '✓';
+            document.getElementById('sumStatus').innerHTML = checkmarkSvg;
         }
 
         // CAS count
@@ -766,7 +875,7 @@
         const proofEl = document.getElementById('proofStatus');
         const proofPanel = document.getElementById('proofPanel');
         if (data.sumInput && data.avgInput) {
-            proofEl.textContent = '✓';
+            proofEl.innerHTML = checkmarkSvg;
             proofPanel.innerHTML = `
     <div class="proof-status"><div class="proof-dot ok"></div> <span>Circuit inputs ready</span></div>
     <div style="font-size:0.82rem; color:var(--text-dim); line-height:1.6;">
@@ -774,7 +883,7 @@
       <code style="color:var(--accent);">npm run zk:setup && npm run zk:prove</code>
     </div>`;
         } else {
-            proofEl.textContent = '⏳';
+            proofEl.innerHTML = pendingSvg;
             proofPanel.innerHTML = `
     <div class="proof-status"><div class="proof-dot pending"></div> <span>Proof not verified yet</span></div>
     <div style="font-size:0.82rem; color:var(--text-dim); line-height:1.6;">
@@ -819,7 +928,7 @@
 
         // update stat card
         const heStatusEl = document.getElementById('heStatus');
-        if (heStatusEl) heStatusEl.textContent = he.verified ? '✓' : '✗';
+        if (heStatusEl) heStatusEl.innerHTML = he.verified ? checkmarkSvg : `<span class="status-pending" style="color:var(--error); background:rgba(244,63,94,0.1); border-color:rgba(244,63,94,0.2);"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg></span>`;
     }
 
     // auto-load on page open
