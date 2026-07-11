@@ -2,634 +2,829 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZeroSync – Dashboard</title>
-    <style>
-        :root {
-            --bg: #0f1117;
-            --surface: #1a1d27;
-            --surface2: #22253a;
-            --border: #2a2d3a;
-            --accent: #6c63ff;
-            --accent-glow: rgba(108, 99, 255, 0.15);
-            --he-color: #00e676;
-            --he-glow: rgba(0, 230, 118, 0.15);
-            --success: #4caf50;
-            --error: #ef5350;
-            --warn: #ffa726;
-            --peer: #29b6f6;
-            --text: #e0e0e0;
-            --text-dim: #888;
-            --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            --mono: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZeroSync – Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07090e;
+      --surface: rgba(18, 20, 29, 0.65);
+      --surface-solid: #12141d;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(99, 102, 241, 0.4);
+      --accent: #6366f1;
+      --accent-glow: rgba(99, 102, 241, 0.15);
+      --he-color: #10b981;
+      --he-glow: rgba(16, 185, 129, 0.1);
+      --success: #10b981;
+      --error: #f43f5e;
+      --warn: #f59e0b;
+      --peer: #0ea5e9;
+      --text: #f1f5f9;
+      --text-dim: #94a3b8;
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
+      --mono: 'Fira Code', 'Consolas', monospace;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: var(--font);
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-        }
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 90% 10%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 10% 90%, rgba(16, 185, 129, 0.04) 0%, transparent 45%);
+      color: var(--text);
+      min-height: 100vh;
+    }
 
-        header {
-            background: linear-gradient(135deg, #1a1d27 0%, #252838 100%);
-            border-bottom: 1px solid var(--border);
-            padding: 1.2rem 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+    header {
+      background: rgba(10, 11, 18, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
+    .logo { display: flex; align-items: center; gap: 0.85rem; }
 
-        .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: var(--accent);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: white;
-        }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 100%);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    }
 
-        h1 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, var(--accent), #a78bfa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
+    .logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
 
-        .tagline {
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            margin-top: 2px;
-        }
+    h1 {
+      font-family: var(--font-display);
+      font-size: 1.45rem; font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 30%, #c7d2fe 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
-        .header-right {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
+    .tagline { font-size: 0.78rem; color: var(--text-dim); margin-top: 1px; font-weight: 500; }
 
-        .nav-link {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.82rem;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            transition: all 0.2s;
-        }
+    .header-right { display: flex; align-items: center; gap: 1rem; }
 
-        .nav-link:hover {
-            color: var(--text);
-            background: rgba(255, 255, 255, 0.05);
-        }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-dim); text-decoration: none; font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem; border-radius: 8px;
+      border: 1px solid transparent;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .nav-link:hover { 
+      color: var(--text); 
+      background: rgba(255, 255, 255, 0.03); 
+      border-color: var(--border);
+    }
+    .nav-link.active {
+      color: var(--accent);
+      background: rgba(99, 102, 241, 0.08);
+      border-color: rgba(99, 102, 241, 0.2);
+    }
+    .nav-link svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
 
-        .dashboard {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+    .dashboard {
+      padding: 2.5rem;
+      max-width: 1300px;
+      margin: 0 auto;
+    }
 
-        .dashboard h2 {
-            font-size: 1.1rem;
-            color: var(--text-dim);
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-weight: 500;
-        }
+    .dashboard h2 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--text);
+      margin-bottom: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .dashboard h2 svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2.5;
+      color: var(--accent);
+    }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
 
-        .stat-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.2rem;
-            position: relative;
-            overflow: hidden;
-        }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.4rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .stat-card:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    }
 
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), #a78bfa);
-        }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent) 0%, #8b5cf6 100%);
+    }
 
-        .stat-label {
-            font-size: 0.72rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
+    .stat-label {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+    }
 
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text);
-            margin: 0.3rem 0;
-            font-family: var(--mono);
-        }
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      margin: 0.4rem 0;
+      font-family: var(--mono);
+      letter-spacing: -0.03em;
+    }
 
-        .stat-sub {
-            font-size: 0.72rem;
-            color: var(--text-dim);
-        }
+    .stat-sub {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
 
-        .panels {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
+    .panels {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.75rem;
+      margin-bottom: 1.75rem;
+    }
 
-        @media (max-width: 768px) {
-            .panels {
-                grid-template-columns: 1fr;
-            }
-        }
+    @media (max-width: 992px) {
+      .panels {
+        grid-template-columns: 1fr;
+      }
+    }
 
-        .panel {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-        }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: all 0.25s ease;
+    }
+    .panel:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+    }
 
-        .panel-header {
-            padding: 0.8rem 1.2rem;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.78rem;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: var(--text-dim);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
+    .panel-header {
+      padding: 1.1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dim);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(13, 15, 23, 0.4);
+    }
 
-        .panel-body {
-            padding: 1.2rem;
-        }
+    .panel-header span {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .panel-header svg {
+      width: 15px;
+      height: 15px;
+      stroke-width: 2.5;
+    }
 
-        .update-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            font-size: 0.8rem;
-        }
+    .panel-body {
+      padding: 1.5rem;
+      min-height: 220px;
+    }
 
-        .update-row:last-child {
-            border-bottom: none;
-        }
+    .update-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 0.85rem;
+    }
 
-        .update-client {
-            color: var(--peer);
-            font-family: var(--mono);
-            font-size: 0.75rem;
-        }
+    .update-row:last-child {
+      border-bottom: none;
+    }
 
-        .update-vec {
-            color: var(--text-dim);
-            font-family: var(--mono);
-            font-size: 0.72rem;
-        }
+    .update-client {
+      color: var(--peer);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
 
-        .proof-status {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin: 0.8rem 0;
-        }
+    .update-vec {
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+    }
 
-        .proof-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
+    .proof-status {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
 
-        .proof-dot.ok {
-            background: var(--success);
-        }
+    .proof-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
 
-        .proof-dot.pending {
-            background: var(--warn);
-        }
+    .proof-dot.ok {
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
 
-        .proof-dot.fail {
-            background: var(--error);
-        }
+    .proof-dot.pending {
+      background: var(--warn);
+      box-shadow: 0 0 8px var(--warn);
+    }
 
-        .hash-display {
-            font-family: var(--mono);
-            font-size: 0.72rem;
-            color: var(--accent);
-            background: rgba(0, 0, 0, 0.3);
-            padding: 0.4rem 0.6rem;
-            border-radius: 6px;
-            margin: 0.4rem 0;
-            word-break: break-all;
-        }
+    .proof-dot.fail {
+      background: var(--error);
+      box-shadow: 0 0 8px var(--error);
+    }
 
-        .result-grid {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: 0.3rem 1rem;
-            font-size: 0.82rem;
-        }
+    .hash-display {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      background: rgba(0, 0, 0, 0.35);
+      padding: 0.6rem 0.8rem;
+      border-radius: 8px;
+      margin: 0.5rem 0 1rem 0;
+      word-break: break-all;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+    }
 
-        .result-label {
-            color: var(--text-dim);
-        }
+    .result-grid {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 0.5rem 1rem;
+      font-size: 0.88rem;
+      background: rgba(0, 0, 0, 0.15);
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+    }
 
-        .result-value {
-            font-family: var(--mono);
-            color: var(--text);
-        }
+    .result-label {
+      color: var(--text-dim);
+      font-weight: 500;
+    }
 
-        button.btn-refresh {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-dim);
-            padding: 0.3rem 0.8rem;
-            border-radius: 6px;
-            font-size: 0.72rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+    .result-value {
+      font-family: var(--mono);
+      color: var(--text);
+      font-weight: 500;
+    }
 
-        button.btn-refresh:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
+    button.btn-refresh {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      padding: 0.4rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s;
+    }
 
-        .empty-state {
-            color: var(--text-dim);
-            font-size: 0.82rem;
-            text-align: center;
-            padding: 2rem;
-        }
+    button.btn-refresh:hover {
+      border-color: var(--accent-glow);
+      background: rgba(99, 102, 241, 0.05);
+      color: var(--accent);
+    }
+    button.btn-refresh svg {
+      width: 12px;
+      height: 12px;
+      stroke-width: 2.5;
+    }
 
-        .stat-card.he::before {
-            background: linear-gradient(90deg, var(--he-color), #69f0ae);
-        }
+    .empty-state {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 3rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+    .empty-state svg {
+      width: 36px;
+      height: 36px;
+      stroke: var(--text-dim);
+      stroke-width: 1.5;
+      opacity: 0.5;
+    }
+    .empty-state code {
+      font-family: var(--mono);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      color: var(--accent);
+      font-size: 0.78rem;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+    }
 
-        .he-badge {
-            display: inline-block;
-            background: var(--he-glow);
-            color: var(--he-color);
-            font-size: 0.65rem;
-            padding: 0.15rem 0.5rem;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 230, 118, 0.3);
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
+    .stat-card.he::before {
+      background: linear-gradient(90deg, var(--he-color) 0%, #34d399 100%);
+    }
 
-        .he-timing {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 0.2rem 1rem;
-            font-size: 0.75rem;
-            margin-top: 0.8rem;
-        }
+    .he-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(16, 185, 129, 0.08);
+      color: var(--success);
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
 
-        .he-timing-label { color: var(--text-dim); }
-        .he-timing-value { color: var(--he-color); font-family: var(--mono); text-align: right; }
+    .he-timing {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.4rem 1.5rem;
+      font-size: 0.82rem;
+      margin-top: 1.25rem;
+      background: rgba(0, 0, 0, 0.15);
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+    }
 
-        .he-verified {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.6rem 0.8rem;
-            background: var(--he-glow);
-            border: 1px solid rgba(0, 230, 118, 0.2);
-            border-radius: 8px;
-            font-size: 0.78rem;
-            color: var(--he-color);
-            margin-bottom: 0.8rem;
-        }
+    .he-timing-label { color: var(--text-dim); font-weight: 500; }
+    .he-timing-value { color: var(--he-color); font-family: var(--mono); text-align: right; font-weight: 600; }
 
-        .panels-triple {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-    </style>
+    .he-verified {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.8rem 1rem;
+      background: rgba(16, 185, 129, 0.06);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 10px;
+      font-size: 0.85rem;
+      color: #34d399;
+      margin-bottom: 1.25rem;
+      font-weight: 500;
+      box-shadow: 0 2px 10px rgba(16, 185, 129, 0.05);
+    }
+
+    .panels-triple {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+      margin-bottom: 2.5rem;
+    }
+  </style>
 </head>
 
 <body>
 
-    <header>
-        <div class="logo">
-            <div class="logo-icon">T</div>
-            <div>
-                <h1>ZeroSync</h1>
-                <div class="tagline">Aggregation Dashboard</div>
-            </div>
-        </div>
-        <div class="header-right">
-            <a href="index.html" class="nav-link">🧠 Training</a>
-            <a href="dashboard.html" class="nav-link" style="color:var(--accent);">📊 Dashboard</a>
-        </div>
-    </header>
+  <header>
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        </svg>
+      </div>
+      <div>
+        <h1>ZeroSync</h1>
+        <div class="tagline">Aggregation Dashboard</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <a href="index.html" class="nav-link">
+        <svg viewBox="0 0 24 24">
+          <path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1113 16h9m-9-8a4.5 4.5 0 00-9 0m9 8a4.5 4.5 0 01-9 0" />
+        </svg>
+        🧠 Training
+      </a>
+      <a href="dashboard.html" class="nav-link active">
+        <svg viewBox="0 0 24 24">
+          <path d="M18 20V10M12 20V4M6 20v-6" />
+        </svg>
+        📊 Dashboard
+      </a>
+    </div>
+  </header>
 
-    <div class="dashboard">
-        <h2>Aggregation Results</h2>
+  <div class="dashboard">
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+        <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+      </svg>
+      Aggregation Results
+    </h2>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Client Updates</div>
-                <div class="stat-value" id="updateCount">—</div>
-                <div class="stat-sub">received by aggregator</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Weighted Sum</div>
-                <div class="stat-value" id="sumStatus">—</div>
-                <div class="stat-sub">circuit input generated</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">ZK Proof</div>
-                <div class="stat-value" id="proofStatus">—</div>
-                <div class="stat-sub">PLONK verification</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">CAS Artifacts</div>
-                <div class="stat-value" id="casCount">—</div>
-                <div class="stat-sub">content-addressed</div>
-            </div>
-            <div class="stat-card he">
-                <div class="stat-label">Homomorphic Encryption</div>
-                <div class="stat-value" id="heStatus">—</div>
-                <div class="stat-sub">Paillier encrypted aggregation</div>
-            </div>
-        </div>
-
-        <div class="panels">
-            <div class="panel">
-                <div class="panel-header">
-                    <span>📥 Client Updates</span>
-                    <button class="btn-refresh" onclick="loadData()">↻ Refresh</button>
-                </div>
-                <div class="panel-body" id="updatesPanel">
-                    <div class="empty-state">Click refresh to load data from server</div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-header"><span>🧮 Aggregation Results</span></div>
-                <div class="panel-body" id="resultsPanel">
-                    <div class="empty-state">Run the aggregator first: <code>npm run aggregate</code></div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-header"><span>🔐 ZK Proof Status</span></div>
-                <div class="panel-body" id="proofPanel">
-                    <div class="empty-state">Run ZK workflow: <code>npm run zk:setup && npm run zk:prove</code></div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-header"><span>📦 CAS Storage</span></div>
-                <div class="panel-body" id="casPanel">
-                    <div class="empty-state">Artifacts appear after aggregation</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="panels-triple">
-            <div class="panel">
-                <div class="panel-header"><span>🔐 Homomorphic Encryption</span> <span class="he-badge">PAILLIER</span></div>
-                <div class="panel-body" id="hePanel">
-                    <div class="empty-state">Run HE aggregation: <code>npm run he:aggregate</code></div>
-                </div>
-            </div>
-        </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Client Updates</div>
+        <div class="stat-value" id="updateCount">—</div>
+        <div class="stat-sub">Received by aggregator</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Weighted Sum</div>
+        <div class="stat-value" id="sumStatus">—</div>
+        <div class="stat-sub">Circuit input generated</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">ZK Proof</div>
+        <div class="stat-value" id="proofStatus">—</div>
+        <div class="stat-sub">PLONK verification status</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">CAS Artifacts</div>
+        <div class="stat-value" id="casCount">—</div>
+        <div class="stat-sub">Content-addressed hashes</div>
+      </div>
+      <div class="stat-card he">
+        <div class="stat-label">HE Aggregation</div>
+        <div class="stat-value" id="heStatus">—</div>
+        <div class="stat-sub">Paillier homomorphic sum</div>
+      </div>
     </div>
 
-    <script>
-        // dashboard loads aggregation results from dashboard_data.json
-        // this file gets generated by the aggregator: npm run aggregate
+    <div class="panels">
+      <div class="panel">
+        <div class="panel-header">
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+            </svg>
+            Client Updates
+          </span>
+          <button class="btn-refresh" onclick="loadData()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H18.5"/>
+            </svg>
+            Refresh
+          </button>
+        </div>
+        <div class="panel-body" id="updatesPanel">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            <span>Click refresh to load client updates from server</span>
+          </div>
+        </div>
+      </div>
 
-        async function loadData() {
-            try {
-                const resp = await fetch('/dashboard_data.json?t=' + Date.now());
-                if (!resp.ok) {
-                    console.log('no dashboard data yet, run: npm run aggregate');
-                    return;
-                }
-                const data = await resp.json();
+      <div class="panel">
+        <div class="panel-header">
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+            Aggregation Results
+          </span>
+        </div>
+        <div class="panel-body" id="resultsPanel">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <span>Run the aggregator first: <code>npm run aggregate</code></span>
+          </div>
+        </div>
+      </div>
 
-                // render client updates
-                if (data.clientUpdates) renderClientUpdates(data.clientUpdates);
+      <div class="panel">
+        <div class="panel-header">
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+            </svg>
+            ZK Proof Status
+          </span>
+        </div>
+        <div class="panel-body" id="proofPanel">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span>Run ZK workflow: <code>npm run zk:setup && npm run zk:prove</code></span>
+          </div>
+        </div>
+      </div>
 
-                // render sum circuit input
-                if (data.sumInput) renderAggResults(data.sumInput);
+      <div class="panel">
+        <div class="panel-header">
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+            </svg>
+            CAS Storage
+          </span>
+        </div>
+        <div class="panel-body" id="casPanel">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+            <span>Content-addressed storage artifacts appear after aggregation</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                // render average circuit input
-                if (data.avgInput) renderAvgResults(data.avgInput);
+    <div class="panels-triple">
+      <div class="panel">
+        <div class="panel-header">
+          <span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+            </svg>
+            Homomorphic Encryption
+          </span> 
+          <span class="he-badge">PAILLIER</span>
+        </div>
+        <div class="panel-body" id="hePanel">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"/></svg>
+            <span>Run HE aggregation demo: <code>npm run he:aggregate</code></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-                // render CAS artifacts
-                if (data.cas && data.cas.length > 0) renderCAS(data.cas);
+  <script>
+    // dashboard loads aggregation results from dashboard_data.json
+    // this file gets generated by the aggregator: npm run aggregate
 
-                // render HE results
-                if (data.homomorphicEncryption) renderHE(data.homomorphicEncryption);
-
-                // update stat cards with real data
-                updateStatCards(data);
-            } catch (e) {
-                console.log('dashboard fetch error:', e);
-            }
-        }
-
-        function renderClientUpdates(updates) {
-            const panel = document.getElementById('updatesPanel');
-            if (!updates || updates.length === 0) {
-                panel.innerHTML = '<div class="empty-state">No updates received yet</div>';
+    async function loadData() {
+        try {
+            const resp = await fetch('/dashboard_data.json?t=' + Date.now());
+            if (!resp.ok) {
+                console.log('no dashboard data yet, run: npm run aggregate');
                 return;
             }
+            const data = await resp.json();
 
-            let html = '';
-            updates.forEach(u => {
-                const dpBadge = u.dpEnabled
-                    ? `<span style="color:var(--success); font-size:0.68rem;"> 🔒 ε=${u.epsilon}</span>`
-                    : '';
-                const time = u.timestamp ? new Date(u.timestamp).toLocaleTimeString() : '';
-                html += `<div class="update-row">
-          <span class="update-client">${u.clientId.slice(0, 20)}${dpBadge}</span>
-          <span class="update-vec">[${u.vector.join(', ')}]</span>
-        </div>`;
-            });
-            panel.innerHTML = html;
+            // render client updates
+            if (data.clientUpdates) renderClientUpdates(data.clientUpdates);
+
+            // render sum circuit input
+            if (data.sumInput) renderAggResults(data.sumInput);
+
+            // render average circuit input
+            if (data.avgInput) renderAvgResults(data.avgInput);
+
+            // render CAS artifacts
+            if (data.cas && data.cas.length > 0) renderCAS(data.cas);
+
+            // render HE results
+            if (data.homomorphicEncryption) renderHE(data.homomorphicEncryption);
+
+            // update stat cards with real data
+            updateStatCards(data);
+        } catch (e) {
+            console.log('dashboard fetch error:', e);
+        }
+    }
+
+    function renderClientUpdates(updates) {
+        const panel = document.getElementById('updatesPanel');
+        if (!updates || updates.length === 0) {
+            panel.innerHTML = `
+              <div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                <span>No client updates received yet</span>
+              </div>`;
+            return;
         }
 
-        function renderAggResults(data) {
-            const panel = document.getElementById('resultsPanel');
-            const vectors = data.vectors || [];
-            const weights = data.weights || [];
-            const result = data.expected_result || data.expected_average || [];
+        let html = '';
+        updates.forEach(u => {
+            const clientName = (u.clientId || 'unknown').slice(0, 20);
+            const dpBadge = u.dpEnabled
+                ? `<span style="color:var(--privacy); font-size:0.75rem; font-weight:700; margin-left:6px;"> 🔒 DP ε=${u.epsilon}</span>`
+                : '';
+            html += `<div class="update-row">
+      <span class="update-client">${clientName}${dpBadge}</span>
+      <span class="update-vec">[${u.vector.join(', ')}]</span>
+    </div>`;
+        });
+        panel.innerHTML = html;
+    }
 
-            let html = '<div class="result-grid">';
-            html += `<div class="result-label">Clients</div><div class="result-value">${vectors.length}</div>`;
-            html += `<div class="result-label">Vector Length</div><div class="result-value">${result.length}</div>`;
-            html += `<div class="result-label">Weights</div><div class="result-value">[${weights.join(', ')}]</div>`;
-            html += `<div class="result-label">Result</div><div class="result-value">[${result.join(', ')}]</div>`;
+    function renderAggResults(data) {
+        const panel = document.getElementById('resultsPanel');
+        const vectors = data.vectors || [];
+        const weights = data.weights || [];
+        const result = data.expected_result || data.expected_average || [];
+
+        let html = '<div class="result-grid">';
+        html += `<div class="result-label">Clients</div><div class="result-value">${vectors.length}</div>`;
+        html += `<div class="result-label">Vector Length</div><div class="result-value">${result.length}</div>`;
+        html += `<div class="result-label">Weights</div><div class="result-value">[${weights.join(', ')}]</div>`;
+        html += `<div class="result-label">Result Sum</div><div class="result-value" style="color:var(--accent); font-weight:700;">[${result.join(', ')}]</div>`;
+        html += '</div>';
+
+        html += '<div style="margin-top:1.5rem; font-size:0.78rem; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.5rem;">Clipped Vector Details:</div>';
+        vectors.forEach((vec, i) => {
+            html += `<div class="update-row">
+      <span class="update-client" style="color:var(--text-dim);">client_${i}</span>
+      <span class="update-vec">[${vec.join(', ')}]</span>
+    </div>`;
+        });
+
+        panel.innerHTML = html;
+    }
+
+    function renderAvgResults(data) {
+        if (!data.expected_average) return;
+        const panel = document.getElementById('resultsPanel');
+        const existing = panel.innerHTML;
+
+        let html = '<div style="margin-top:1.5rem; padding-top:1.2rem; border-top:1px solid var(--border);">';
+        html += '<div style="font-size:0.78rem; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:0.75rem;">Division Proof verification:</div>';
+        html += '<div class="result-grid">';
+        html += `<div class="result-label">Average</div><div class="result-value" style="color:var(--peer);">[${data.expected_average.join(', ')}]</div>`;
+        html += `<div class="result-label">Total Weight</div><div class="result-value">${data.total_weight}</div>`;
+        html += `<div class="result-label">Remainder</div><div class="result-value">[${data.remainder.join(', ')}]</div>`;
+        html += '</div></div>';
+
+        panel.innerHTML = existing + html;
+    }
+
+    function renderCAS(items) {
+        const panel = document.getElementById('casPanel');
+        if (!items || items.length === 0) {
+            panel.innerHTML = `
+              <div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                <span>No artifacts stored yet</span>
+              </div>`;
+            return;
+        }
+
+        let html = '';
+        items.forEach(item => {
+            html += `<div style="margin-bottom:1.1rem; border-bottom: 1px solid rgba(255,255,255,0.02); padding-bottom:0.8rem;">
+      <div style="font-size:0.75rem; color:var(--text-dim); font-weight:500; text-transform:capitalize; margin-bottom:0.25rem;">${(item.type || 'unknown').replace(/_/g, ' ')} – ${item.size || '?'} bytes</div>
+      <div class="hash-display">${item.hash}</div>
+    </div>`;
+        });
+        panel.innerHTML = html;
+    }
+
+    function updateStatCards(data) {
+        // update count
+        if (data.sumInput && data.sumInput.vectors) {
+            document.getElementById('updateCount').textContent = data.sumInput.vectors.length;
+        }
+
+        // weighted sum status
+        if (data.sumInput) {
+            document.getElementById('sumStatus').textContent = '✓';
+        }
+
+        // CAS count
+        if (data.cas) {
+            document.getElementById('casCount').textContent = data.cas.length;
+        }
+
+        // proof status - show verified if we have complete data
+        const proofEl = document.getElementById('proofStatus');
+        const proofPanel = document.getElementById('proofPanel');
+        if (data.sumInput && data.avgInput) {
+            proofEl.textContent = '✓';
+            proofPanel.innerHTML = `
+    <div class="proof-status"><div class="proof-dot ok"></div> <span>Circuit inputs ready</span></div>
+    <div style="font-size:0.82rem; color:var(--text-dim); line-height:1.6;">
+      ZK inputs generated – run PLONK prover for full verification:<br>
+      <code style="color:var(--accent);">npm run zk:setup && npm run zk:prove</code>
+    </div>`;
+        } else {
+            proofEl.textContent = '⏳';
+            proofPanel.innerHTML = `
+    <div class="proof-status"><div class="proof-dot pending"></div> <span>Proof not verified yet</span></div>
+    <div style="font-size:0.82rem; color:var(--text-dim); line-height:1.6;">
+      Run the ZK workflow to generate and verify proofs:<br>
+      <code style="color:var(--accent);">npm run zk:setup && npm run zk:prove</code>
+    </div>`;
+        }
+    }
+
+    function renderHE(he) {
+        const panel = document.getElementById('hePanel');
+        if (!he) return;
+
+        let html = '';
+
+        // verification badge
+        if (he.verified) {
+            html += '<div class="he-verified">✓ Encrypted aggregation verified — decrypted result matches plaintext sum exactly</div>';
+        } else {
+            html += '<div class="he-verified" style="color:var(--error); border-color:rgba(244,63,94,0.3); background:rgba(244,63,94,0.06);">✗ Verification failed</div>';
+        }
+
+        html += '<div class="result-grid">';
+        html += `<div class="result-label">Key Size</div><div class="result-value">${he.keyBits}-bit Paillier</div>`;
+        html += `<div class="result-label">Clients</div><div class="result-value">${he.numClients}</div>`;
+        html += `<div class="result-label">Vector Length</div><div class="result-value">${he.vectorLen}</div>`;
+        html += `<div class="result-label">Plaintext Sum</div><div class="result-value">[${he.plaintextSum.join(', ')}]</div>`;
+        html += `<div class="result-label">Decrypted Sum</div><div class="result-value" style="color:var(--he-color); font-weight:700;">[${he.decryptedSum.join(', ')}]</div>`;
+        html += '</div>';
+
+        // timing breakdown
+        if (he.timings) {
+            html += '<div class="he-timing">';
+            html += `<div class="he-timing-label">Key Generation</div><div class="he-timing-value">${he.timings.keyGen}ms</div>`;
+            html += `<div class="he-timing-label">Encryption</div><div class="he-timing-value">${he.timings.encryption}ms</div>`;
+            html += `<div class="he-timing-label">Homomorphic Sum</div><div class="he-timing-value">${he.timings.homomorphicSum}ms</div>`;
+            html += `<div class="he-timing-label">Decryption</div><div class="he-timing-value">${he.timings.decryption}ms</div>`;
             html += '</div>';
-
-            html += '<div style="margin-top:1rem; font-size:0.75rem; color:var(--text-dim);">Client vectors:</div>';
-            vectors.forEach((vec, i) => {
-                html += `<div class="update-row">
-          <span class="update-client">client_${i}</span>
-          <span class="update-vec">[${vec.join(', ')}]</span>
-        </div>`;
-            });
-
-            panel.innerHTML = html;
         }
 
-        function renderAvgResults(data) {
-            if (!data.expected_average) return;
-            const panel = document.getElementById('resultsPanel');
-            const existing = panel.innerHTML;
+        panel.innerHTML = html;
 
-            let html = '<div style="margin-top:1rem; padding-top:0.8rem; border-top:1px solid var(--border);">';
-            html += '<div style="font-size:0.75rem; color:var(--text-dim); margin-bottom:0.5rem;">Division Proof:</div>';
-            html += '<div class="result-grid">';
-            html += `<div class="result-label">Average</div><div class="result-value">[${data.expected_average.join(', ')}]</div>`;
-            html += `<div class="result-label">Total Weight</div><div class="result-value">${data.total_weight}</div>`;
-            html += `<div class="result-label">Remainder</div><div class="result-value">[${data.remainder.join(', ')}]</div>`;
-            html += '</div></div>';
+        // update stat card
+        const heStatusEl = document.getElementById('heStatus');
+        if (heStatusEl) heStatusEl.textContent = he.verified ? '✓' : '✗';
+    }
 
-            panel.innerHTML = existing + html;
-        }
-
-        function renderCAS(items) {
-            const panel = document.getElementById('casPanel');
-            if (!items || items.length === 0) {
-                panel.innerHTML = '<div class="empty-state">No artifacts stored yet</div>';
-                return;
-            }
-
-            let html = '';
-            items.forEach(item => {
-                html += `<div style="margin-bottom:0.8rem;">
-          <div style="font-size:0.72rem; color:var(--text-dim);">${item.type || 'unknown'} – ${item.size || '?'} bytes</div>
-          <div class="hash-display">${item.hash}</div>
-        </div>`;
-            });
-            panel.innerHTML = html;
-        }
-
-        function updateStatCards(data) {
-            // update count
-            if (data.sumInput && data.sumInput.vectors) {
-                document.getElementById('updateCount').textContent = data.sumInput.vectors.length;
-            }
-
-            // weighted sum status
-            if (data.sumInput) {
-                document.getElementById('sumStatus').textContent = '✓';
-            }
-
-            // CAS count
-            if (data.cas) {
-                document.getElementById('casCount').textContent = data.cas.length;
-            }
-
-            // proof status - show verified if we have complete data
-            const proofEl = document.getElementById('proofStatus');
-            const proofPanel = document.getElementById('proofPanel');
-            if (data.sumInput && data.avgInput) {
-                proofEl.textContent = '✓';
-                proofPanel.innerHTML = `
-        <div class="proof-status"><div class="proof-dot ok"></div> <span>Circuit inputs ready</span></div>
-        <div style="font-size:0.78rem; color:var(--text-dim);">
-          ZK inputs generated – run PLONK prover for full verification:<br>
-          <code style="color:var(--accent);">npm run zk:setup && npm run zk:prove</code>
-        </div>`;
-            } else {
-                proofEl.textContent = '⏳';
-                proofPanel.innerHTML = `
-        <div class="proof-status"><div class="proof-dot pending"></div> <span>Proof not verified yet</span></div>
-        <div style="font-size:0.78rem; color:var(--text-dim);">
-          Run the ZK workflow to generate and verify proofs:<br>
-          <code style="color:var(--accent);">npm run zk:setup && npm run zk:prove</code>
-        </div>`;
-            }
-        }
-
-        function renderHE(he) {
-            const panel = document.getElementById('hePanel');
-            if (!he) return;
-
-            let html = '';
-
-            // verification badge
-            if (he.verified) {
-                html += '<div class="he-verified">✓ Encrypted aggregation verified — decrypted result matches plaintext sum exactly</div>';
-            } else {
-                html += '<div class="he-verified" style="color:var(--error); border-color:rgba(239,83,80,0.3); background:rgba(239,83,80,0.1);">✗ Verification failed</div>';
-            }
-
-            html += '<div class="result-grid">';
-            html += `<div class="result-label">Key Size</div><div class="result-value">${he.keyBits}-bit Paillier</div>`;
-            html += `<div class="result-label">Clients</div><div class="result-value">${he.numClients}</div>`;
-            html += `<div class="result-label">Vector Length</div><div class="result-value">${he.vectorLen}</div>`;
-            html += `<div class="result-label">Plaintext Sum</div><div class="result-value">[${he.plaintextSum.join(', ')}]</div>`;
-            html += `<div class="result-label">Decrypted Sum</div><div class="result-value" style="color:var(--he-color);">[${he.decryptedSum.join(', ')}]</div>`;
-            html += '</div>';
-
-            // timing breakdown
-            if (he.timings) {
-                html += '<div class="he-timing">';
-                html += `<div class="he-timing-label">Key Generation</div><div class="he-timing-value">${he.timings.keyGen}ms</div>`;
-                html += `<div class="he-timing-label">Encryption</div><div class="he-timing-value">${he.timings.encryption}ms</div>`;
-                html += `<div class="he-timing-label">Homomorphic Sum</div><div class="he-timing-value">${he.timings.homomorphicSum}ms</div>`;
-                html += `<div class="he-timing-label">Decryption</div><div class="he-timing-value">${he.timings.decryption}ms</div>`;
-                html += '</div>';
-            }
-
-            panel.innerHTML = html;
-
-            // update stat card
-            const heStatusEl = document.getElementById('heStatus');
-            if (heStatusEl) heStatusEl.textContent = he.verified ? '✓' : '✗';
-        }
-
-        // auto-load on page open
-        window.addEventListener('DOMContentLoaded', loadData);
-    </script>
+    // auto-load on page open
+    window.addEventListener('DOMContentLoaded', loadData);
+  </script>
 
 </body>
 

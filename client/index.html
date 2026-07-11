@@ -7,211 +7,355 @@
   <meta name="description"
     content="ZeroSync – Browser-native federated continual learning with differential privacy, ZK proofs, and deterministic replay">
   <title>ZeroSync – Federated Learning Playground</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f1117;
-      --surface: #1a1d27;
-      --border: #2a2d3a;
-      --accent: #6c63ff;
-      --accent-hover: #7b73ff;
-      --success: #4caf50;
-      --error: #ef5350;
-      --peer: #29b6f6;
-      --privacy: #ab47bc;
-      --text: #e0e0e0;
-      --text-dim: #888;
-      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      --mono: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+      --bg: #07090e;
+      --surface: rgba(18, 20, 29, 0.65);
+      --surface-solid: #12141d;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-focus: rgba(99, 102, 241, 0.4);
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --accent-glow: rgba(99, 102, 241, 0.15);
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.1);
+      --error: #f43f5e;
+      --peer: #0ea5e9;
+      --privacy: #a855f7;
+      --text: #f1f5f9;
+      --text-dim: #94a3b8;
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
+      --mono: 'Fira Code', 'Consolas', monospace;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: var(--font);
-      background: var(--bg);
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 45%);
       color: var(--text);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
     }
 
     header {
-      background: linear-gradient(135deg, #1a1d27 0%, #252838 100%);
+      background: rgba(10, 11, 18, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
-      padding: 1.2rem 2rem;
+      padding: 1rem 2.5rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      z-index: 10;
     }
 
-    .logo { display: flex; align-items: center; gap: 0.75rem; }
+    .logo { display: flex; align-items: center; gap: 0.85rem; }
 
     .logo-icon {
-      width: 36px; height: 36px;
-      background: var(--accent);
-      border-radius: 8px;
+      width: 40px; height: 40px;
+      background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 100%);
+      border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem; font-weight: bold; color: white;
+      color: white;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .logo-icon svg {
+      width: 22px;
+      height: 22px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
     }
 
     h1 {
-      font-size: 1.3rem; font-weight: 600;
-      background: linear-gradient(135deg, var(--accent), #a78bfa);
+      font-family: var(--font-display);
+      font-size: 1.45rem; font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #ffffff 30%, #c7d2fe 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .tagline { font-size: 0.75rem; color: var(--text-dim); margin-top: 2px; }
+    .tagline { font-size: 0.78rem; color: var(--text-dim); margin-top: 1px; font-weight: 500; }
 
-    .header-right { display: flex; align-items: center; gap: 1rem; }
+    .header-right { display: flex; align-items: center; gap: 1.2rem; }
 
     .nav-link {
-      color: var(--text-dim); text-decoration: none; font-size: 0.82rem;
-      padding: 0.4rem 0.8rem; border-radius: 6px;
-      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-dim); text-decoration: none; font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem; border-radius: 8px;
+      border: 1px solid transparent;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .nav-link:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+    .nav-link:hover { 
+      color: var(--text); 
+      background: rgba(255, 255, 255, 0.03); 
+      border-color: var(--border);
+    }
+    .nav-link svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+    }
 
     .status-badge {
-      display: flex; align-items: center; gap: 0.5rem;
-      padding: 0.4rem 1rem; border-radius: 20px;
-      background: var(--surface); border: 1px solid var(--border);
-      font-size: 0.8rem;
+      display: flex; align-items: center; gap: 0.6rem;
+      padding: 0.5rem 1.2rem; border-radius: 30px;
+      background: rgba(255, 255, 255, 0.02); 
+      border: 1px solid var(--border);
+      font-size: 0.82rem;
+      font-weight: 500;
     }
 
     .status-dot {
       width: 8px; height: 8px; border-radius: 50%;
-      background: var(--error); animation: pulse 2s infinite;
+      background: var(--error); 
+      box-shadow: 0 0 8px var(--error);
+      animation: pulse 2s infinite;
     }
-    .status-dot.connected { background: var(--success); }
+    .status-dot.connected { 
+      background: var(--success); 
+      box-shadow: 0 0 8px var(--success);
+    }
 
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
     main {
       flex: 1; display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 0; max-height: calc(100vh - 70px);
+      grid-template-columns: 360px 1fr;
+      gap: 0; 
+      height: calc(100vh - 72px);
     }
 
     .sidebar {
-      background: var(--surface);
+      background: rgba(13, 15, 23, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-right: 1px solid var(--border);
-      padding: 1.5rem;
-      display: flex; flex-direction: column; gap: 1.2rem;
+      padding: 1.75rem;
+      display: flex; flex-direction: column; gap: 1.25rem;
       overflow-y: auto;
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px; padding: 1rem;
+      border-radius: 14px; padding: 1.2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
     }
 
     .card h3 {
-      font-size: 0.75rem; text-transform: uppercase;
-      letter-spacing: 0.08em; color: var(--text-dim);
-      margin-bottom: 0.75rem;
+      font-family: var(--font-display);
+      font-size: 0.8rem; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--text-dim);
+      margin-bottom: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card h3 svg {
+      width: 14px;
+      height: 14px;
+      stroke-width: 2.5;
     }
 
     .info-row {
       display: flex; justify-content: space-between;
-      padding: 0.3rem 0; font-size: 0.85rem;
+      padding: 0.4rem 0; font-size: 0.85rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+    }
+    .info-row:last-child {
+      border-bottom: none;
     }
     .info-label { color: var(--text-dim); }
     .info-value {
-      font-family: var(--mono); color: var(--accent); font-size: 0.8rem;
+      font-family: var(--mono); color: var(--accent); font-weight: 500;
     }
 
-    .actions { display: flex; flex-direction: column; gap: 0.6rem; }
+    .actions { display: flex; flex-direction: column; gap: 0.75rem; }
 
     button {
-      font-family: var(--font); font-size: 0.85rem; font-weight: 500;
-      padding: 0.7rem 1rem; border: 1px solid var(--border);
-      border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
-      display: flex; align-items: center; gap: 0.5rem;
+      font-family: var(--font); font-size: 0.88rem; font-weight: 600;
+      padding: 0.75rem 1.2rem; border: 1px solid var(--border);
+      border-radius: 10px; cursor: pointer; 
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex; align-items: center; justify-content: center; gap: 0.6rem;
     }
 
-    .btn-primary { background: var(--accent); color: white; border-color: var(--accent); }
+    .btn-primary { 
+      background: linear-gradient(135deg, var(--accent) 0%, #4f46e5 100%); 
+      color: white; 
+      border: none;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+    }
     .btn-primary:hover:not(:disabled) {
-      background: var(--accent-hover); transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
     }
-    .btn-secondary { background: transparent; color: var(--text); }
-    .btn-secondary:hover:not(:disabled) { background: rgba(255,255,255,0.05); border-color: var(--accent); }
+    .btn-secondary { 
+      background: rgba(255, 255, 255, 0.03); 
+      color: var(--text); 
+      border-color: var(--border);
+    }
+    .btn-secondary:hover:not(:disabled) { 
+      background: rgba(255, 255, 255, 0.07); 
+      border-color: var(--border-focus); 
+      transform: translateY(-1px);
+    }
     .btn-success {
-      background: rgba(76, 175, 80, 0.15); color: var(--success);
-      border-color: rgba(76, 175, 80, 0.3);
+      background: rgba(16, 185, 129, 0.1); 
+      color: var(--success);
+      border-color: rgba(16, 185, 129, 0.25);
     }
-    .btn-success:hover:not(:disabled) { background: rgba(76, 175, 80, 0.25); }
-    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-success:hover:not(:disabled) { 
+      background: rgba(16, 185, 129, 0.18); 
+      border-color: var(--success);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.15);
+    }
+    button:disabled { opacity: 0.35; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+    button svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+    }
 
     select {
-      width: 100%; padding: 0.5rem 0.75rem;
-      background: rgba(0,0,0,0.3); border: 1px solid var(--border);
-      border-radius: 8px; color: var(--text); font-family: var(--font);
-      font-size: 0.82rem; appearance: none; cursor: pointer;
+      width: 100%; padding: 0.65rem 1rem;
+      background: rgba(8, 9, 15, 0.6); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text); font-family: var(--font);
+      font-size: 0.85rem; appearance: none; cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1rem;
+      padding-right: 2.5rem;
+      transition: all 0.2s;
     }
-    select:focus { outline: none; border-color: var(--accent); }
+    select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); }
 
-    .log-panel { display: flex; flex-direction: column; overflow: hidden; }
+    .log-panel { 
+      display: flex; flex-direction: column; overflow: hidden; 
+      background-color: #0b0c11;
+      position: relative;
+    }
 
     .log-header {
-      padding: 0.8rem 1.5rem; border-bottom: 1px solid var(--border);
-      font-size: 0.8rem; font-weight: 600; color: var(--text-dim);
+      padding: 1.1rem 2rem; border-bottom: 1px solid var(--border);
+      font-family: var(--font-display);
+      font-size: 0.8rem; font-weight: 700; color: var(--text-dim);
       text-transform: uppercase; letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(13, 15, 23, 0.4);
+    }
+    .log-header svg {
+      width: 15px;
+      height: 15px;
+      stroke-width: 2.5;
+      color: var(--accent);
     }
 
     #log {
-      flex: 1; overflow-y: auto; padding: 1rem 1.5rem;
-      font-family: var(--mono); font-size: 0.78rem; line-height: 1.6;
+      flex: 1; overflow-y: auto; padding: 1.5rem 2rem;
+      font-family: var(--mono); font-size: 0.82rem; line-height: 1.6;
+      scroll-behavior: smooth;
     }
 
-    .log-line { padding: 0.15rem 0; border-left: 2px solid transparent; padding-left: 0.75rem; }
-    .log-line.info { border-color: var(--text-dim); color: var(--text-dim); }
-    .log-line.success { border-color: var(--success); color: var(--success); }
-    .log-line.error { border-color: var(--error); color: var(--error); }
-    .log-line.peer { border-color: var(--peer); color: var(--peer); }
+    .log-line { 
+      padding: 0.35rem 0; border-left: 2px solid transparent; padding-left: 1rem; 
+      animation: logFadeIn 0.2s ease-out forwards;
+      margin-bottom: 0.25rem;
+    }
+    @keyframes logFadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .log-line.info { border-color: rgba(255, 255, 255, 0.15); color: var(--text-dim); }
+    .log-line.success { border-color: var(--success); color: #6ee7b7; background: rgba(16, 185, 129, 0.03); }
+    .log-line.error { border-color: var(--error); color: #fda4af; background: rgba(244, 63, 94, 0.03); }
+    .log-line.peer { border-color: var(--peer); color: #7dd3fc; background: rgba(14, 165, 233, 0.03); }
 
     .model-arch {
-      font-family: var(--mono); font-size: 0.7rem; color: var(--text-dim);
-      background: rgba(0,0,0,0.3); padding: 0.5rem;
-      border-radius: 6px; margin-top: 0.5rem; line-height: 1.5;
+      font-family: var(--mono); font-size: 0.75rem; color: var(--text-dim);
+      background: rgba(0, 0, 0, 0.25); padding: 0.75rem 1rem;
+      border-radius: 8px; margin-top: 0.25rem; line-height: 1.6;
+      border: 1px solid rgba(255, 255, 255, 0.03);
     }
 
     /* privacy slider styling */
-    .privacy-card { border-color: rgba(171, 71, 188, 0.3); }
+    .privacy-card { border-color: rgba(168, 85, 247, 0.2); }
+    .privacy-card:hover { border-color: rgba(168, 85, 247, 0.4); }
     .privacy-card h3 { color: var(--privacy); }
 
     .slider-row {
-      display: flex; align-items: center; gap: 0.75rem;
-      margin: 0.5rem 0;
+      display: flex; align-items: center; gap: 0.85rem;
+      margin: 0.6rem 0;
     }
 
     input[type="range"] {
-      flex: 1; height: 4px; appearance: none;
-      background: linear-gradient(90deg, var(--success), var(--privacy), var(--error));
-      border-radius: 2px; outline: none;
+      flex: 1; height: 6px; appearance: none;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 10px; outline: none;
+      transition: all 0.2s;
     }
     input[type="range"]::-webkit-slider-thumb {
-      appearance: none; width: 16px; height: 16px;
-      background: white; border-radius: 50%;
-      border: 2px solid var(--privacy);
-      cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      appearance: none; width: 18px; height: 18px;
+      background: #ffffff; border-radius: 50%;
+      border: 3.5px solid var(--privacy);
+      cursor: pointer; box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+      transition: transform 0.15s, background-color 0.15s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+      background: var(--privacy);
+      border-color: #ffffff;
     }
 
     .epsilon-badge {
-      font-family: var(--mono); font-size: 0.85rem; font-weight: 600;
-      color: var(--privacy); min-width: 36px; text-align: right;
+      font-family: var(--mono); font-size: 0.9rem; font-weight: 700;
+      color: var(--privacy); min-width: 40px; text-align: right;
+      text-shadow: 0 0 10px rgba(168, 85, 247, 0.2);
     }
 
     .dp-hint {
-      font-size: 0.7rem; color: var(--text-dim);
-      margin-top: 0.4rem; line-height: 1.4;
+      font-size: 0.75rem; color: var(--text-dim);
+      margin-top: 0.5rem; line-height: 1.5;
     }
 
     @media (max-width: 768px) {
-      main { grid-template-columns: 1fr; max-height: none; }
-      .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+      main { grid-template-columns: 1fr; height: auto; overflow: visible; }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--border); overflow-y: visible; }
+      .log-panel { height: 450px; }
     }
   </style>
 </head>
@@ -220,14 +364,23 @@
 
   <header>
     <div class="logo">
-      <div class="logo-icon">T</div>
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        </svg>
+      </div>
       <div>
         <h1>ZeroSync</h1>
         <div class="tagline">Federated Learning · Differential Privacy · ZK Proofs</div>
       </div>
     </div>
     <div class="header-right">
-      <a href="dashboard.html" class="nav-link">📊 Dashboard</a>
+      <a href="dashboard.html" class="nav-link">
+        <svg viewBox="0 0 24 24">
+          <path d="M18 20V10M12 20V4M6 20v-6" />
+        </svg>
+        📊 Dashboard
+      </a>
       <div class="status-badge">
         <div class="status-dot" id="statusDot"></div>
         <span id="status">Initializing…</span>
@@ -238,7 +391,12 @@
   <main>
     <aside class="sidebar">
       <div class="card">
-        <h3>Client Info</h3>
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          Client Info
+        </h3>
         <div class="info-row">
           <span class="info-label">Client ID</span>
           <span class="info-value" id="clientId">—</span>
@@ -254,7 +412,12 @@
       </div>
 
       <div class="card">
-        <h3>Model Architecture</h3>
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+          </svg>
+          Model Architecture
+        </h3>
         <div class="model-arch">
           Input(4) → Dense(8, relu)<br>
           → Dense(2, softmax)<br>
@@ -264,7 +427,12 @@
       </div>
 
       <div class="card">
-        <h3>Dataset</h3>
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.58 4 8 4s8-1.79 8-4M4 7c0-2.21 3.58-4 8-4s8 1.79 8 4m0 5c0 2.21-3.58 4-8 4s-8-1.79-8-4"/>
+          </svg>
+          Dataset
+        </h3>
         <select id="datasetSelect">
           <option value="synthetic">🎲 Synthetic (random)</option>
           <option value="iris">🌺 Iris (real data)</option>
@@ -272,44 +440,86 @@
       </div>
 
       <div class="card privacy-card">
-        <h3>🔒 Differential Privacy</h3>
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          Differential Privacy
+        </h3>
         <div class="slider-row">
-          <span style="font-size:0.72rem; color:var(--text-dim);">ε =</span>
+          <span style="font-size:0.75rem; color:var(--text-dim); font-weight: 600;">ε =</span>
           <input type="range" id="epsilonSlider" min="0" max="10" step="0.5" value="0">
           <span class="epsilon-badge" id="epsilonDisplay">OFF</span>
         </div>
         <div id="dpStatus" class="dp-hint">Disabled — raw weights sent as-is</div>
-        <div class="dp-hint" style="margin-top:0.3rem; opacity:0.6;">
-          0=off · 0.5=strong · 2=moderate · 10=weak
+        <div class="dp-hint" style="margin-top:0.4rem; opacity:0.6; font-size: 0.7rem;">
+          0 = off · 0.5 = strong · 2 = moderate · 10 = weak
         </div>
       </div>
 
       <div class="card">
-        <h3>Actions</h3>
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+          </svg>
+          Actions
+        </h3>
         <div class="actions">
-          <button id="btnConnect" class="btn-secondary">🔌 Connect to Server</button>
-          <button id="btnTrain" class="btn-primary">🧠 Start Local Train Step</button>
-          <button id="btnSend" class="btn-success">📡 Send Update To Peers</button>
-          <button id="btnRecord" class="btn-secondary">💾 Record Replay</button>
+          <button id="btnConnect" class="btn-secondary">
+            <svg viewBox="0 0 24 24">
+              <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 00-7.53-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
+            </svg>
+            Connect to Server
+          </button>
+          <button id="btnTrain" class="btn-primary">
+            <svg viewBox="0 0 24 24" style="stroke-width: 2.5;">
+              <path d="M9.59 4.59A2 2 0 1111 8H2m10.59 11.41A2 2 0 1113 16h9m-9-8a4.5 4.5 0 00-9 0m9 8a4.5 4.5 0 01-9 0"/>
+            </svg>
+            Start Local Train Step
+          </button>
+          <button id="btnSend" class="btn-success">
+            <svg viewBox="0 0 24 24">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+            Send Update To Peers
+          </button>
+          <button id="btnRecord" class="btn-secondary">
+            <svg viewBox="0 0 24 24">
+              <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" />
+              <path d="M17 21v-8H7v8M7 3v5h8" />
+            </svg>
+            Record Replay
+          </button>
         </div>
       </div>
 
-      <div class="card">
-        <h3>Quick Guide</h3>
-        <div style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.6;">
-          1. Click <strong>Connect</strong> to join<br>
-          2. Pick dataset + set privacy level<br>
-          3. Click <strong>Train</strong> → run local step<br>
-          4. Click <strong>Send</strong> → broadcast weights<br>
-          5. Click <strong>Record</strong> → save artifact<br>
+      <div class="card" style="margin-bottom: 1.5rem;">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+          Quick Guide
+        </h3>
+        <div style="font-size: 0.8rem; color: var(--text-dim); line-height: 1.6;">
+          1. Click <strong>Connect</strong> to join signaling.<br>
+          2. Pick dataset and privacy budget.<br>
+          3. Click <strong>Train</strong> to run a local step.<br>
+          4. Click <strong>Send</strong> to broadcast weights.<br>
+          5. Click <strong>Record</strong> to export a replay.<br>
           <br>
-          Open multiple tabs for multi-client demo.
+          Open multiple browser tabs to simulate active peers.
         </div>
       </div>
     </aside>
 
     <div class="log-panel">
-      <div class="log-header">Event Log</div>
+      <div class="log-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+        </svg>
+        Live Operations log
+      </div>
       <div id="log"></div>
     </div>
   </main>

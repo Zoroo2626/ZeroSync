@@ -1,45 +1,43 @@
-# ZeroSync 🧠
+# ZeroSync
 
-> **Browser-native Federated Learning with a Triple-Layer Privacy Stack.**
+A browser-native federated learning setup with a triple-layer privacy stack.
 
-Look, most federated learning (FL) frameworks are massive beasts. They run on Python, they require crazy container orchestration, and you basically need a PhD to get them running on end-user devices. I wanted something that just works in the browser.
+Most federated learning frameworks are heavy. They run on Python, require container orchestration, and need complex setups to run on user devices. ZeroSync works directly in the browser.
 
-More importantly, I wanted a *real* privacy stack. Not just a promise that "we won't look at your data." I'm talking mathematically guaranteed, cryptographically enforced privacy. 
+More importantly, it implements a real privacy stack. Instead of just promising that your data is safe, it enforces privacy cryptographically.
 
-So I built ZeroSync. 
+The triple-layer privacy stack:
+1. **Differential Privacy (DP)**: Gaussian or Laplace noise is added to the model weights on the client side before the data leaves the device.
+2. **Homomorphic Encryption (HE)**: Built using the Paillier cryptosystem so the aggregator can sum up all model updates while they are still encrypted. The server never sees the raw numbers.
+3. **Zero-Knowledge Proofs (ZK)**: We generate PLONK circuits via Circom to prove that the aggregation was done correctly, then verify that proof on-chain using a Solidity smart contract.
 
-It’s an end-to-end federated learning prototype that runs right in the browser. But the real magic is what I call the **Triple-Layer Privacy Stack**:
-1. **Differential Privacy (DP)** — Gaussian/Laplace noise is added to the model weights on the client side *before* the data ever leaves the device.
-2. **Homomorphic Encryption (HE)** — We use the Paillier cryptosystem so the aggregator (central server) can sum up all the model updates while they are still encrypted. The server literally never sees the raw numbers.
-3. **Zero-Knowledge Proofs (ZK)** — We generate PLONK circuits via Circom to prove that the aggregation was done correctly, and we verify that proof on-chain via a Solidity smart contract.
-
-If you're an engineer or researcher looking to understand what the future of privacy-preserving ML actually looks like, this is your reference implementation.
+If you want to understand how privacy-preserving ML actually works in practice, this is a clean reference implementation.
 
 ![ZeroSync Dashboard](./assets/dashboard.png)
 
 ***
 
-## What's actually under the hood?
+## What is under the hood?
 
-I didn't just wire up a bunch of existing libraries. A lot of this is built from scratch to work natively in JS/Node:
-* **Zero-dependency Paillier HE:** The entire Paillier cryptosystem (`crypto/paillier.js`) is written in pure JavaScript using `BigInt`. No weird C++ bindings, no massive WASM blobs. It handles key generation, encryption, decryption, and (crucially) homomorphic addition of signed integers.
-* **WebRTC Data Channels:** Clients don't just talk to the server; they can talk to each other.
-* **Smart Contract Verification:** Proofs are verified on a local Hardhat network (`OnChainVerifier.sol`).
-* **Content-Addressed Storage (CAS):** Model checkpoints and proofs are stored using IPFS-style SHA-256 content addressing.
+We built a lot of this from scratch to work natively in JavaScript:
+* **Zero-dependency Paillier HE**: The entire Paillier cryptosystem (`crypto/paillier.js`) is written in pure JavaScript using `BigInt`. No native C++ bindings or massive WASM blobs are required. It handles key generation, encryption, decryption, and homomorphic addition of signed integers.
+* **WebRTC Data Channels**: Clients can talk directly to each other instead of routing everything through the server.
+* **Smart Contract Verification**: Proofs are verified on a local Hardhat network (`OnChainVerifier.sol`).
+* **Content-Addressed Storage (CAS)**: Model checkpoints and proofs are stored using SHA-256 content addressing.
 
-## How to run this thing
+## How to run it
 
-It's actually super simple to spin up locally.
+It is easy to spin up locally.
 
 1. **Install dependencies:**
    ```bash
    npm install
    ```
-2. **Start the HTTP server (serves the client UI):**
+2. **Start the HTTP server to serve the client UI:**
    ```bash
    npm run start:client
    ```
-   *Go to `http://127.0.0.1:8000` and you'll see the training UI. Open a few tabs to simulate multiple clients training on different data.*
+   Open `http://127.0.0.1:8000` to see the training UI. You can open multiple tabs to simulate multiple clients training on different data.
 
 3. **Start the Signaling and Aggregation Server:**
    ```bash
@@ -50,30 +48,28 @@ It's actually super simple to spin up locally.
    ```bash
    npm run he:aggregate
    ```
-   *This takes the updates from your clients, encrypts them, sums them up homomorphically, decrypts the result, and verifies that it matches the plaintext sum exactly. Check `http://127.0.0.1:8000/dashboard.html` to see the results live.*
+   This takes the updates from your clients, encrypts them, sums them up homomorphically, decrypts the result, and verifies that it matches the plaintext sum. Open `http://127.0.0.1:8000/dashboard.html` to see the live results.
 
-5. **(Optional) Run the ZK Proof generation and verification:**
+5. **Run the ZK Proof generation and verification:**
    ```bash
    npm run zk:setup
    npm run zk:prove
    ```
 
-## Why did I build this?
+## Why did we build this?
 
-Because the privacy tech stack is fragmented. Blockchain people know ZK. AI people know FL. Data scientists know DP. Cryptographers know HE. But very few people are putting them all together in one system, let alone making it run smoothly in a browser environment.
+Privacy tech is often fragmented. Blockchain devs know ZK, ML devs know FL, data scientists know DP, and cryptographers know HE. Very few projects put them all together in one system, let alone run them in a browser.
 
-This project is my proof-of-work that these technologies can (and should) be combined.
+This project is a proof of concept showing that these technologies can be combined into a single, cohesive workflow.
 
 ## License
 
-This project is licensed under the **AGPL-3.0 License**. 
+This project is licensed under the **AGPL-3.0 License**.
 
-What does that mean for you? 
-* **If you're an individual, student, or researcher:** Go crazy. Read the code, fork it, learn from it, run it.
-* **If you're a company wanting to use this commercially:** You are legally required to open-source your entire product under the same license if you use this code. If you don't want to open-source your company's product, you'll need a commercial license. In that case, **reach out to me directly**. 
+What this means for you:
+* **For individuals, students, or researchers**: Feel free to read the code, fork it, learn from it, and run it.
+* **For commercial use**: You are legally required to open-source your entire product under the same license if you use this code. If you want to keep your product closed-source, you will need a commercial license. In that case, reach out directly.
 
-## Contact / Consulting
+## Contact
 
-I am available for freelance/contract work. If your startup or lab is building privacy-preserving AI and you need someone who actually understands how to implement DP, ZK, and HE end-to-end, let's talk.
-
-### astrynnoctra@gmail.com
+Email: astrynnoctra@gmail.com
