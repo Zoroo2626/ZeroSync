@@ -9,7 +9,7 @@
     "hardhat:deploy": "cd hardhat && npx hardhat run scripts/deploy.js --network localhost",
     "start:signaling": "node server/signaling.js",
     "start:server": "npm run start:signaling",
-    "start:client:demo": "python3 -m http.server 8000 --directory client",
+    "start:client:demo": "node scripts/serve.js",
     "start:client": "npm run start:client:demo",
     "zk:setup": "cd zk && bash build_setup.sh",
     "zk:prove": "cd zk && bash prove_and_verify.sh",
