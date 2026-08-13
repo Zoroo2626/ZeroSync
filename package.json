@@ -43,7 +43,7 @@
     "webrtc",
     "zk-proofs"
   ],
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "dependencies": {
     "dotenv": "^17.3.1"
   }
